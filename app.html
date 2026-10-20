@@ -1,0 +1,1964 @@
+<title>GanitaDrishti by Balaji</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=JetBrains+Mono:wght@400;600&family=Noto+Sans+Tamil:wght@400;600&family=Source+Sans+3:wght@400;600&display=swap">
+<style>
+/* Layout: graph-paper workbench. A sticky header, a concept rail on the left, the working surface on the right. */
+:root{
+  --paper:#F1F5F3; --surface:#FFFFFF; --sunk:#E9EFEC; --ink:#12242A; --muted:#55686D; --line:#D2DCD7;
+  --grid:#E1E9E5; --grid2:#C9D6D0;
+  --accent:#0C7660; --accent-ink:#FFFFFF; --accent-weak:#DAEEE7;
+  --vec:#2D58A6; --vec-weak:#E0E8F6;
+  --good:#1D8548; --good-weak:#DFF1E6; --warn:#9E6410; --warn-weak:#FAEFD9; --bad:#BF3F0B; --bad-weak:#FBE6DB;
+  --display:'Bricolage Grotesque','Noto Sans Tamil',system-ui,sans-serif;
+  --body:'Source Sans 3','Noto Sans Tamil',system-ui,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,Consolas,monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --paper:#0E1618; --surface:#152125; --sunk:#111B1E; --ink:#E3ECEA; --muted:#92A5A8; --line:#29393D;
+  --grid:#1A272B; --grid2:#24353A;
+  --accent:#3DC09E; --accent-ink:#06231C; --accent-weak:#143A31;
+  --vec:#82A8F2; --vec-weak:#1B2A44;
+  --good:#4CC27E; --good-weak:#15331F; --warn:#E3AA4E; --warn-weak:#3A2C12; --bad:#F2804F; --bad-weak:#3E2015;
+  color-scheme:dark; } }
+:root[data-theme="dark"]{
+  --paper:#0E1618; --surface:#152125; --sunk:#111B1E; --ink:#E3ECEA; --muted:#92A5A8; --line:#29393D;
+  --grid:#1A272B; --grid2:#24353A;
+  --accent:#3DC09E; --accent-ink:#06231C; --accent-weak:#143A31;
+  --vec:#82A8F2; --vec-weak:#1B2A44;
+  --good:#4CC27E; --good-weak:#15331F; --warn:#E3AA4E; --warn-weak:#3A2C12; --bad:#F2804F; --bad-weak:#3E2015;
+  color-scheme:dark; }
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
+h1,h2,h3{font-family:var(--display);font-weight:700;line-height:1.15;text-wrap:balance;margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+[lang="ta"]{font-family:'Noto Sans Tamil',var(--body)}
+.sub-en{display:block;font-size:.84em;color:var(--muted)}
+.mono{font-family:var(--mono)}
+.muted{color:var(--muted)}
+.wrap{max-width:1240px;margin:0 auto}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--paper);border-bottom:1px solid var(--line);margin:0 calc(-1 * max(16px,env(safe-area-inset-left,0px))) 0;padding:10px max(16px,env(safe-area-inset-left,0px))}
+.top .wrap{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;margin-right:auto;min-width:0}
+.mark{width:36px;height:36px;border-radius:9px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font:700 22px/1 var(--display)}
+.brand b{font-family:var(--display);font-size:19px;letter-spacing:-.01em;display:block}
+.brand small{color:var(--muted);font-size:13px;display:block}
+.seg{display:inline-flex;background:var(--sunk);border:1px solid var(--line);border-radius:999px;padding:3px}
+.seg button{border:0;background:none;padding:6px 14px;border-radius:999px;color:var(--muted);font-weight:600;font-size:14px}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.sel{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:6px 8px;font-size:14px}
+.ainote{font-size:13.5px;color:var(--warn);background:var(--warn-weak);border-radius:8px;padding:6px 12px;margin:10px auto 0;max-width:1240px}
+
+/* student shell */
+.shell{display:grid;grid-template-columns:260px minmax(0,1fr);grid-template-rows:auto 1fr;gap:18px 22px;margin:18px auto 0;max-width:1240px}
+.railC{grid-column:1;grid-row:1}.railX{grid-column:1;grid-row:2;align-self:start}#main{grid-column:2;grid-row:1 / span 2}
+@media (max-width:880px){.shell{grid-template-columns:minmax(0,1fr)}.railC,.railX,#main{grid-column:1;grid-row:auto}
+ .railC{flex-direction:row;overflow-x:auto;gap:14px;padding-bottom:4px}.railC>div{flex:none}.railC .clist{flex-direction:row}.railC .cbtn{width:210px}}
+.rail{display:flex;flex-direction:column;gap:18px}
+.rail h4{font:600 12px/1.2 var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+.clist{display:flex;flex-direction:column;gap:6px}
+.cbtn{display:block;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px 12px}
+.cbtn[aria-current="true"]{border-color:var(--accent);box-shadow:inset 3px 0 0 var(--accent)}
+.cbtn .nm{font-weight:600;display:block}
+.meter{height:6px;border-radius:9px;background:var(--sunk);overflow:hidden;margin-top:8px}
+.meter i{display:block;height:100%;background:var(--accent);border-radius:9px}
+.cbtn .pct{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.mislist{display:flex;flex-direction:column;gap:6px;margin:0;padding:0;list-style:none}
+.mislist li{font-size:14px;background:var(--bad-weak);border-radius:8px;padding:7px 10px;display:flex;gap:8px;align-items:flex-start}
+.mislist .n{font:600 12px var(--mono);background:var(--bad);color:var(--surface);border-radius:6px;padding:1px 6px;flex:none}
+.linkbtn{background:none;border:0;padding:0;color:var(--accent);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+
+/* main surface */
+.chead{display:flex;flex-wrap:wrap;align-items:end;gap:10px 16px;margin-bottom:12px}
+.chead .eyebrow{font-size:13px;color:var(--muted);letter-spacing:.04em;width:100%}
+.chead h2{font-size:clamp(26px,3.4vw,36px)}
+.chip{display:inline-flex;align-items:center;gap:6px;font:600 12px/1 var(--mono);padding:5px 8px;border-radius:6px;background:var(--accent-weak);color:var(--accent)}
+.chip.ai{background:var(--vec-weak);color:var(--vec)}
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:6px 0 16px}
+.steps button{border:1px solid var(--line);background:var(--surface);border-radius:var(--r);padding:9px 10px;text-align:left;display:flex;gap:10px;align-items:center;min-width:0}
+.steps .no{font:600 13px var(--mono);width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--sunk);color:var(--muted);flex:none}
+.steps button[aria-selected="true"]{border-color:var(--accent);background:var(--accent-weak)}
+.steps button[aria-selected="true"] .no{background:var(--accent);color:var(--accent-ink)}
+.steps .lbl{font-weight:600;line-height:1.2;min-width:0}
+.steps .lbl .sub-en{font-weight:400}
+@media (max-width:600px){.steps{gap:4px}.steps button{padding:8px 6px;justify-content:center;text-align:center}.steps .no{display:none}.steps .lbl{font-size:14px}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.lead{max-width:68ch;margin:0 0 12px;font-size:17px}
+.hint{color:var(--muted);margin:0 0 14px;max-width:70ch}
+.stage{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.stage canvas{display:block;width:100%;height:360px;touch-action:none}
+@media (max-width:600px){.stage canvas{height:300px}}
+.readout{display:flex;flex-wrap:wrap;gap:6px 18px;padding:10px 14px;border-top:1px solid var(--line);font:14px var(--mono);font-variant-numeric:tabular-nums}
+.readout b{font-weight:600}
+.readout .flag{color:var(--good);font-weight:600}
+.ctrls{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px 18px;margin-top:12px}
+.ctrl label{display:flex;justify-content:space-between;font-size:14px;color:var(--muted);margin-bottom:2px}
+.ctrl output{font:600 14px var(--mono);color:var(--ink)}
+.ctrl input[type=range]{width:100%;accent-color:var(--accent)}
+.presets{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:10px}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:8px 14px;font-weight:600;font-size:15px;display:inline-flex;align-items:center;gap:8px}
+.btn:hover{border-color:var(--grid2)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.ai{border-color:var(--vec);color:var(--vec)}
+.btn.small{padding:5px 10px;font-size:13.5px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.stepnav{display:flex;justify-content:flex-end;margin-top:16px}
+
+/* ask */
+.qlist{display:flex;flex-direction:column;gap:14px}
+.qcard .qn{font:600 12px var(--mono);color:var(--muted);margin-bottom:4px}
+.qcard .qt{font-weight:600;font-size:17px;margin-bottom:10px}
+.opts{display:grid;gap:8px}
+.opt{text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:9px 12px;display:flex;gap:10px;align-items:flex-start}
+.opt .k{font:600 13px var(--mono);color:var(--muted);flex:none;padding-top:1px}
+.opt.right{border-color:var(--good);background:var(--good-weak)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-weak)}
+.fb{margin-top:10px;font-size:15px;padding:8px 12px;border-radius:8px}
+.fb.good{background:var(--good-weak)} .fb.bad{background:var(--bad-weak)}
+.fb .tag{font:600 12px var(--mono);color:var(--bad)}
+.chat{margin-top:18px}
+.msgs{display:flex;flex-direction:column;gap:8px;margin:10px 0}
+.msg{padding:9px 12px;border-radius:10px;max-width:80ch;white-space:pre-wrap}
+.msg.me{align-self:flex-end;background:var(--accent-weak)}
+.msg.ai{align-self:flex-start;background:var(--sunk)}
+textarea.box{width:100%;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:10px 12px;resize:vertical}
+
+/* check */
+.cgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+@media (max-width:980px){.cgrid{grid-template-columns:minmax(0,1fr)}}
+.prob{font-size:18px;font-weight:600;margin:0 0 10px}
+textarea.work{width:100%;min-height:170px;font:15px/1.7 var(--mono);border:1px solid var(--line);background:var(--surface) repeating-linear-gradient(transparent 0 calc(1.7em - 1px),var(--grid) calc(1.7em - 1px) 1.7em);background-attachment:local;border-radius:8px;padding:6px 12px;resize:vertical;background-position:0 6px}
+.note{font-size:13.5px;color:var(--muted)}
+.lines{margin:10px 0 0;padding:0;list-style:none;font:14px/1.6 var(--mono);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.lines li{display:flex;gap:10px;padding:3px 10px;border-top:1px solid var(--grid)}
+.lines li:first-child{border-top:0}
+.lines .ln{color:var(--muted);width:2ch;text-align:right;flex:none}
+.lines li.bad{background:var(--bad-weak);box-shadow:inset 3px 0 0 var(--bad)}
+.lines li.ok{background:var(--good-weak)}
+.result{display:flex;flex-direction:column;gap:10px}
+.pill{display:inline-flex;align-items:center;gap:6px;font-weight:700;padding:4px 10px;border-radius:999px;font-size:14px;width:max-content}
+.pill.ok{background:var(--good-weak);color:var(--good)} .pill.bad{background:var(--bad-weak);color:var(--bad)} .pill.part{background:var(--warn-weak);color:var(--warn)}
+.misbox{border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.misbox .id{font:600 12px var(--mono);color:var(--bad)}
+.sol{white-space:pre-wrap;font:14.5px/1.7 var(--mono);background:var(--sunk);border-radius:8px;padding:10px 12px;margin:10px 0 0}
+.filein{font-size:14px;max-width:100%}
+.empty{color:var(--muted);border:1px dashed var(--line);border-radius:8px;padding:18px;text-align:center}
+
+/* apply */
+.pips{display:inline-flex;gap:4px;vertical-align:middle}
+.pips i{width:22px;height:8px;border-radius:4px;background:var(--sunk)}
+.pips i.on{background:var(--accent)}
+.ansrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px}
+.ansrow input{width:160px;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:8px 10px;font:16px var(--mono)}
+
+/* college */
+.ctabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin:18px auto 16px;max-width:1240px;overflow-x:auto}
+.ctabs button{border:0;background:none;padding:10px 14px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap}
+.ctabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.cwrap{max-width:1240px;margin:0 auto}
+.course{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;margin:18px auto 0;max-width:1240px}
+.course h2{font-size:clamp(24px,3vw,32px)}
+.qpgrid{display:grid;grid-template-columns:320px minmax(0,1fr);gap:18px;align-items:start}
+.qpgrid.rev{grid-template-columns:minmax(0,1fr) 320px}
+@media (max-width:980px){.qpgrid,.qpgrid.rev{grid-template-columns:minmax(0,1fr)}}
+.form{display:flex;flex-direction:column;gap:12px}
+.form .f label{display:flex;justify-content:space-between;font-size:14px;color:var(--muted)}
+.form .f output{font:600 14px var(--mono);color:var(--ink)}
+.form input[type=range]{width:100%;accent-color:var(--accent)}
+.form input[type=number],.form input[type=text]{width:100%;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:7px 9px}
+.checks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:5px;font-size:14px}
+.checks li{display:flex;justify-content:space-between;gap:8px}
+.checks .v{font:600 13px var(--mono)}
+.ok-t{color:var(--good)} .bad-t{color:var(--bad)}
+.sheet{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:26px clamp(14px,3vw,34px);box-shadow:0 1px 0 var(--line),0 8px 24px -18px rgba(0,0,0,.35)}
+.sheet .hd{text-align:center;border-bottom:2px solid var(--ink);padding-bottom:10px;margin-bottom:12px}
+.sheet .hd b{font-family:var(--display);font-size:20px;display:block}
+.sheet .meta{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;font-size:14px;margin:6px 0 14px}
+.sheet h3{font-size:16px;text-align:center;margin:16px 0 8px;letter-spacing:.04em}
+.tbl{width:100%;border-collapse:collapse;font-size:14.5px}
+.tbl th,.tbl td{border:1px solid var(--line);padding:6px 8px;vertical-align:top;text-align:left}
+.tbl th{background:var(--sunk);font-weight:600;font-size:13px}
+.tbl td.c,.tbl th.c{text-align:center;white-space:nowrap;font-variant-numeric:tabular-nums}
+.tbl .or td{text-align:center;font-weight:600;color:var(--muted);padding:2px}
+.scroll{overflow-x:auto;max-width:100%}
+.bars{display:flex;flex-direction:column;gap:8px}
+.bar{display:grid;grid-template-columns:120px minmax(0,1fr) 54px;gap:10px;align-items:center;font-size:14px}
+.bar .track{position:relative;height:14px;background:var(--sunk);border-radius:4px}
+.bar .fill{position:absolute;inset:0 auto 0 0;background:var(--accent);border-radius:4px}
+.bar .tgt{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink)}
+.bar .val{font:600 13px var(--mono);text-align:right}
+.spark{width:100%;height:56px;display:block}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:16px}
+.status{font:600 12px var(--mono);padding:3px 7px;border-radius:5px}
+.status.met{background:var(--good-weak);color:var(--good)} .status.gap{background:var(--bad-weak);color:var(--bad)}
+.heat td.v{text-align:center;font:600 13px var(--mono);cursor:pointer;min-width:58px}
+.heat td.v:hover{outline:2px solid var(--ink);outline-offset:-2px}
+.heat th.rot{font:600 11.5px var(--mono);white-space:nowrap}
+.legend{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);margin-top:8px}
+.legend .ramp{width:140px;height:10px;border-radius:3px;background:linear-gradient(90deg,var(--surface),var(--bad))}
+.detail{position:sticky;top:80px}
+.mini{font-size:13.5px}
+.tbl input[type=text]{width:100%;min-width:220px;border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:5px 7px}
+.tbl select{border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:3px}
+#modal[hidden]{display:none}
+.coursesel{font:700 clamp(18px,2.4vw,24px)/1.2 var(--display);padding:6px 10px;max-width:100%;min-width:0}
+.lib{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px}
+.libnow{display:flex;flex-direction:column;gap:4px;align-items:flex-start}
+.libnext{margin-top:8px}.libnext ul{margin:6px 0 0;padding-left:18px;font-size:13.5px;display:flex;flex-direction:column;gap:4px}
+.plist{padding-left:20px;display:flex;flex-direction:column;gap:6px}
+@media (max-width:880px){.railC .lib{width:250px}}
+#modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:grid;place-items:center;z-index:20;padding:16px}
+#modal .card{width:min(720px,100%);max-height:85vh;display:flex;flex-direction:column;gap:10px}
+#modal textarea{flex:1;min-height:260px;font:13px var(--mono)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--paper);padding:8px 14px;border-radius:8px;font-size:14px;z-index:30}
+@media (prefers-reduced-motion: reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+
+<header class="top"><div class="wrap">
+  <div class="brand"><span class="mark" aria-hidden="true">∂</span><div><b>GanitaDrishti</b><small id="tagline"></small></div></div>
+  <div class="seg" role="group" aria-label="View">
+    <button id="roleStudent" type="button"></button><button id="roleCollege" type="button"></button>
+  </div>
+  <select id="lang" class="sel" aria-label="Language">
+    <option value="en">English</option><option value="ta">தமிழ்</option><option value="both">தமிழ் + English</option>
+  </select>
+</div></header>
+<div id="aiNote" class="ainote" hidden></div>
+<main id="app"></main>
+<div id="modal" hidden></div>
+
+<script>
+/* ---------- GanitaDrishti: content data ---------- */
+const UI = {
+  student:{en:'Student', ta:'மாணவர்'},
+  college:{en:'College', ta:'கல்லூரி'},
+  tagline:{en:'Engineering mathematics you can see', ta:'காட்சி வழிப் பொறியியல் கணிதம்'},
+  see:{en:'See', ta:'பார்'}, ask:{en:'Ask', ta:'கேள்'}, check:{en:'Check', ta:'சரிபார்'}, apply:{en:'Apply', ta:'பயன்படுத்து'},
+  seeHint:{en:'Move the controls and watch the idea take shape.', ta:'கட்டுப்பாடுகளை நகர்த்தி, கருத்து உருவாவதைப் பாருங்கள்.'},
+  askHint:{en:'Answer each question. A wrong choice tells us which idea to fix.', ta:'ஒவ்வொரு கேள்விக்கும் பதிலளியுங்கள். தவறான தேர்வு எந்தக் கருத்தைச் சரிசெய்ய வேண்டும் என்று காட்டும்.'},
+  checkHint:{en:'Write your working one step per line. The checker finds the first step that goes wrong and names the misconception.', ta:'உங்கள் தீர்வை ஒரு வரிக்கு ஒரு படியாக எழுதுங்கள். முதலில் தவறும் படியைக் கண்டறிந்து, தவறான புரிதலைச் சுட்டிக்காட்டும்.'},
+  applyHint:{en:'Engineering problems that get harder as you get them right.', ta:'சரியாகச் செய்யச் செய்யக் கடினமாகும் பொறியியல் கணக்குகள்.'},
+  checkBtn:{en:'Check my working', ta:'என் தீர்வைச் சரிபார்'},
+  aiDiag:{en:'AI diagnosis', ta:'AI பகுப்பாய்வு'},
+  photo:{en:'Photo of handwritten working', ta:'கையால் எழுதிய தீர்வின் புகைப்படம்'},
+  photoNote:{en:'Optional. The AI diagnosis reads it line by line.', ta:'விருப்பத்தேர்வு. AI பகுப்பாய்வு அதை வரி வரியாகப் படிக்கும்.'},
+  showSol:{en:'Show model solution', ta:'மாதிரித் தீர்வைக் காட்டு'},
+  hideSol:{en:'Hide model solution', ta:'மாதிரித் தீர்வை மறை'},
+  correct:{en:'Correct', ta:'சரி'},
+  notQuite:{en:'Not quite', ta:'சரியில்லை'},
+  partial:{en:'Almost there', ta:'கிட்டத்தட்ட சரி'},
+  unread:{en:'Could not read the working', ta:'தீர்வைப் படிக்க இயலவில்லை'},
+  unreadNote:{en:'Write expressions in plain form, for example 2x sin x + x^2 cos x, one step per line.', ta:'கோவைகளை எளிய வடிவில் எழுதுங்கள், எ.கா. 2x sin x + x^2 cos x, ஒரு வரிக்கு ஒரு படி.'},
+  firstWrong:{en:'First step that goes wrong', ta:'முதலில் தவறும் படி'},
+  line:{en:'Line', ta:'வரி'},
+  misconception:{en:'Misconception', ta:'தவறான புரிதல்'},
+  fix:{en:'How to fix it', ta:'எப்படிச் சரிசெய்வது'},
+  hint:{en:'Hint', ta:'குறிப்பு'},
+  newProblem:{en:'New problem', ta:'புதிய கணக்கு'},
+  submit:{en:'Submit answer', ta:'பதிலைச் சமர்ப்பி'},
+  level:{en:'Level', ta:'நிலை'},
+  yourAnswer:{en:'Your answer', ta:'உங்கள் பதில்'},
+  explainMistake:{en:'Explain my mistake', ta:'என் பிழையை விளக்கு'},
+  askTutor:{en:'Still unsure? Ask the AI tutor', ta:'இன்னும் சந்தேகமா? AI ஆசிரியரிடம் கேளுங்கள்'},
+  askPlaceholder:{en:'Type your doubt in English or Tamil', ta:'உங்கள் சந்தேகத்தைத் தமிழிலோ ஆங்கிலத்திலோ எழுதுங்கள்'},
+  send:{en:'Ask', ta:'கேள்'},
+  stop:{en:'Stop', ta:'நிறுத்து'},
+  mastery:{en:'Mastery', ta:'தேர்ச்சி'},
+  myMis:{en:'Your misconceptions', ta:'உங்கள் தவறான புரிதல்கள்'},
+  none:{en:'None logged yet. They appear here as you work.', ta:'இன்னும் எதுவும் இல்லை. நீங்கள் கணக்குகள் செய்யும்போது இங்கே தோன்றும்.'},
+  seeIt:{en:'See it visually', ta:'காட்சியாகப் பார்'},
+  workedSol:{en:'Worked solution', ta:'செய்முறைத் தீர்வு'},
+  nextStep:{en:'Next', ta:'அடுத்து'},
+  example:{en:'Example working from a student. Replace it with your own.', ta:'ஒரு மாணவரின் மாதிரித் தீர்வு. உங்கள் சொந்தத் தீர்வை எழுதுங்கள்.'},
+  reset:{en:'Reset my progress', ta:'என் முன்னேற்றத்தை அழி'},
+  resetConfirm:{en:'Clear all progress?', ta:'அனைத்தையும் அழிக்கவா?'},
+  yes:{en:'Clear', ta:'அழி'}, no:{en:'Keep', ta:'வேண்டாம்'},
+  thinking:{en:'Thinking…', ta:'யோசிக்கிறது…'},
+  aiOff:{en:'AI features need the Claude app. The offline checker still works.', ta:'AI வசதிகளுக்கு Claude செயலி தேவை. இணையமில்லாச் சரிபார்ப்பு இயங்கும்.'},
+  units:{en:'Two units in this prototype', ta:'இந்த முன்மாதிரியில் இரண்டு அலகுகள்'},
+  tryAgain:{en:'Try again', ta:'மீண்டும் முயல்க'},
+  levelUp:{en:'Level up', ta:'அடுத்த நிலை'},
+  answerWas:{en:'Answer', ta:'பதில்'},
+  library:{en:'Course library', ta:'பாடநெறி நூலகம்'},
+  libNow:{en:'Available now', ta:'இப்போது கிடைப்பது'},
+  libNext:{en:'Planned after the pilot', ta:'சோதனை ஓட்டத்திற்குப் பின் திட்டமிடப்பட்டவை'}
+};
+const LIBRARY = [
+  {en:'Engineering Mathematics I: Units III–V (integral calculus, multiple integrals, ODEs)', ta:'பொறியியல் கணிதம் I: அலகுகள் III–V (தொகை நுண்கணிதம், பன்மடித் தொகைகள், வகைக்கெழுச் சமன்பாடுகள்)'},
+  {en:'Engineering Mathematics II (vector calculus, Laplace transforms, complex analysis)', ta:'பொறியியல் கணிதம் II (வெக்டர் நுண்கணிதம், லாப்லாஸ் உருமாற்றம், கலப்பு எண் பகுப்பாய்வு)'},
+  {en:'Probability and Statistics', ta:'நிகழ்தகவும் புள்ளியியலும்'},
+  {en:'Numerical Methods', ta:'எண் முறைகள்'},
+  {en:'Transforms and Partial Differential Equations', ta:'உருமாற்றங்களும் பகுதி வகைக்கெழுச் சமன்பாடுகளும்'},
+  {en:'Discrete Mathematics and Graph Theory', ta:'தனிநிலைக் கணிதமும் வரைபடக் கோட்பாடும்'}
+];
+
+const MIS = {
+  M_VALUE_SLOPE:{c:'derivative', en:'Confuses the value f(x) with the slope f′(x).', ta:'சார்பின் மதிப்பு f(x)-ஐயும் சாய்வு f′(x)-ஐயும் குழப்புதல்.',
+    fix:{en:'f(x) is the height of the curve; f′(x) is how steep it is. Read height on the y-axis, steepness from the tangent.', ta:'f(x) என்பது வளைவின் உயரம்; f′(x) என்பது அதன் சாய்வு. உயரத்தை y-அச்சிலும், சாய்வைத் தொடுகோட்டிலும் படியுங்கள்.'}},
+  M_FLAT_NONDIFF:{c:'derivative', en:'Thinks a horizontal tangent means the function cannot be differentiated.', ta:'கிடைமட்டத் தொடுகோடு என்றால் வகையிட இயலாது என எண்ணுதல்.',
+    fix:{en:'A flat tangent has slope 0, a perfectly good number. Non-differentiable points are corners or breaks.', ta:'கிடைமட்டத் தொடுகோட்டின் சாய்வு 0 — அது ஒரு சரியான எண். மூலைகள் அல்லது முறிவுகளில்தான் வகையிட இயலாது.'}},
+  M_SIGN:{c:'derivative', en:'Reads the sign of the slope wrongly (increasing vs decreasing).', ta:'சாய்வின் குறியை (ஏறுதல் / இறங்குதல்) தவறாகப் படித்தல்.',
+    fix:{en:'Positive slope: the curve rises left to right. Negative: it falls. Zero: it is flat at that instant.', ta:'நேர்ச் சாய்வு: வளைவு இடமிருந்து வலமாக ஏறும். எதிர்: இறங்கும். பூஜ்யம்: அந்தக் கணத்தில் தட்டையாக இருக்கும்.'}},
+  M_LIMIT_SUB:{c:'derivative', en:'Puts h = 0 straight in instead of taking the limit.', ta:'எல்லை எடுக்காமல் h = 0 என நேரடியாகப் பிரதியிடுதல்.',
+    fix:{en:'Simplify the quotient first so h cancels, then let h approach 0.', ta:'முதலில் விகிதத்தைச் சுருக்கி h-ஐ நீக்குங்கள்; பிறகு h → 0 எனக் கொள்ளுங்கள்.'}},
+  M_PRODUCT:{c:'derivative', en:'Differentiates each factor separately: (uv)′ = u′v′.', ta:'பெருக்கலின் ஒவ்வொரு காரணியையும் தனித்தனியாக வகையிடுதல்: (uv)′ = u′v′.',
+    fix:{en:'Use the product rule: (uv)′ = u′v + uv′. Two terms, each keeps one factor undifferentiated.', ta:'பெருக்கல் விதி: (uv)′ = u′v + uv′. இரண்டு உறுப்புகள்; ஒவ்வொன்றிலும் ஒரு காரணி வகையிடப்படாமல் இருக்கும்.'}},
+  M_PRODUCT_HALF:{c:'derivative', en:'Uses the product rule but drops one of the two terms.', ta:'பெருக்கல் விதியில் இரண்டு உறுப்புகளில் ஒன்றை விடுதல்.',
+    fix:{en:'Write both terms before simplifying: u′v and uv′.', ta:'சுருக்கும் முன் u′v, uv′ இரண்டையும் எழுதுங்கள்.'}},
+  M_SIGN_TRIG:{c:'derivative', en:'Sign error in the derivative of sin or cos.', ta:'sin அல்லது cos வகைக்கெழுவில் குறிப் பிழை.',
+    fix:{en:'(sin x)′ = cos x and (cos x)′ = −sin x. Only cos picks up the minus sign.', ta:'(sin x)′ = cos x, (cos x)′ = −sin x. cos-க்கு மட்டுமே எதிர்க்குறி வரும்.'}},
+  M_CRIT_ALWAYS_EXT:{c:'extrema', en:'Believes every critical point is a maximum or a minimum.', ta:'ஒவ்வொரு மாறுநிலைப் புள்ளியும் பெருமம் அல்லது சிறுமம் என நம்புதல்.',
+    fix:{en:'Check that f′ changes sign. For x³ at 0, f′ = 0 but the curve keeps rising.', ta:'f′ குறி மாறுகிறதா எனப் பாருங்கள். x³-இல் 0-இல் f′ = 0, ஆனால் வளைவு தொடர்ந்து ஏறுகிறது.'}},
+  M_SECOND_DERIV_SIGN:{c:'extrema', en:'Reads the second-derivative test backwards: f″ > 0 taken as a maximum.', ta:'இரண்டாம் வகைக்கெழு சோதனையைத் தலைகீழாகப் படித்தல்: f″ > 0 என்றால் பெருமம் என எண்ணுதல்.',
+    fix:{en:'f″ > 0 means the curve bends up like a cup: a minimum. f″ < 0 bends down like a cap: a maximum.', ta:'f″ > 0: வளைவு கிண்ணம் போல் மேல்நோக்கி வளையும் — சிறுமம். f″ < 0: தொப்பி போல் கீழ்நோக்கி — பெருமம்.'}},
+  M_INFLECT:{c:'extrema', en:'Confuses a turning point with a point of inflection.', ta:'திருப்புப் புள்ளியையும் வளைவு மாற்றப் புள்ளியையும் குழப்புதல்.',
+    fix:{en:'Turning point: f′ changes sign. Inflection: f″ changes sign, the bend flips.', ta:'திருப்புப் புள்ளி: f′ குறி மாறும். வளைவு மாற்றம்: f″ குறி மாறும்.'}},
+  M_FACTOR:{c:'extrema', en:'Algebra slip while solving f′(x) = 0.', ta:'f′(x) = 0 தீர்க்கும்போது இயற்கணிதப் பிழை.',
+    fix:{en:'Take out the common factor first, then factor the quadratic. Substitute each root back to check.', ta:'முதலில் பொதுக் காரணியை எடுங்கள்; பிறகு இருபடியைக் காரணிப்படுத்துங்கள். ஒவ்வொரு மூலத்தையும் மீண்டும் பிரதியிட்டுச் சரிபாருங்கள்.'}},
+  M_ROW_COL:{c:'lintrans', en:'Reads where the basis vectors land from the rows instead of the columns.', ta:'அடிப்படை வெக்டர்கள் எங்கு செல்கின்றன என்பதை நிரல்களுக்குப் பதிலாக நிரைகளில் படித்தல்.',
+    fix:{en:'Column 1 is where î lands; column 2 is where ĵ lands.', ta:'நிரல் 1 என்பது î செல்லும் இடம்; நிரல் 2 என்பது ĵ செல்லும் இடம்.'}},
+  M_DET_ZERO_MATRIX:{c:'lintrans', en:'Thinks det A = 0 only for the zero matrix.', ta:'பூஜ்ய அணிக்கு மட்டுமே det A = 0 என எண்ணுதல்.',
+    fix:{en:'det A = 0 whenever the columns are parallel: the plane collapses onto a line.', ta:'நிரல்கள் இணையாக இருந்தால் det A = 0: தளம் ஒரு கோட்டில் சுருங்கும்.'}},
+  M_DET_SIGN:{c:'lintrans', en:'Adds the diagonal products instead of subtracting: ad + bc.', ta:'மூலைவிட்டப் பெருக்கல்களைக் கழிப்பதற்குப் பதிலாகக் கூட்டுதல்: ad + bc.',
+    fix:{en:'det = ad − bc: main diagonal minus the other diagonal.', ta:'det = ad − bc: முதன்மை மூலைவிட்டம் கழித்தல் மற்ற மூலைவிட்டம்.'}},
+  M_DET_DIAG:{c:'lintrans', en:'Multiplies the wrong pairs of entries.', ta:'தவறான உறுப்பு இணைகளைப் பெருக்குதல்.',
+    fix:{en:'Pair along the diagonals: a with d, b with c.', ta:'மூலைவிட்டங்கள் வழியே இணைக்கவும்: a-உடன் d, b-உடன் c.'}},
+  M_DET_ABS:{c:'lintrans', en:'Drops the sign of the determinant.', ta:'அணிக்கோவையின் குறியை விடுதல்.',
+    fix:{en:'A negative determinant is meaningful: the transformation flips orientation. Keep the sign.', ta:'எதிர் அணிக்கோவைக்குப் பொருள் உண்டு: உருமாற்றம் திசையமைப்பைப் புரட்டுகிறது. குறியை வைத்திருங்கள்.'}},
+  M_EIG_PERP:{c:'eigen', en:'Thinks A turns an eigenvector perpendicular.', ta:'ஐகன் வெக்டரை A செங்குத்தாகத் திருப்பும் என எண்ணுதல்.',
+    fix:{en:'An eigenvector stays on its own line: Av points the same (or opposite) way as v.', ta:'ஐகன் வெக்டர் தன் கோட்டிலேயே இருக்கும்: Av, v-இன் அதே (அல்லது எதிர்) திசையில் இருக்கும்.'}},
+  M_EIGEN_DIAG:{c:'eigen', en:'Takes the diagonal entries as the eigenvalues of any matrix.', ta:'எந்த அணிக்கும் மூலைவிட்ட உறுப்புகளே ஐகன் மதிப்புகள் என எடுத்துக்கொள்ளுதல்.',
+    fix:{en:'That works only for triangular matrices. Otherwise solve det(A − λI) = 0.', ta:'முக்கோண அணிகளுக்கு மட்டுமே இது பொருந்தும். மற்றவற்றுக்கு det(A − λI) = 0 தீர்க்கவும்.'}},
+  M_CHAR_EQ_SIGN:{c:'eigen', en:'Sign error in the characteristic equation det(A − λI) = 0.', ta:'சிறப்பியல்புச் சமன்பாடு det(A − λI) = 0-இல் குறிப் பிழை.',
+    fix:{en:'For a 2×2 matrix: λ² − (trace)λ + det = 0. The middle sign is minus.', ta:'2×2 அணிக்கு: λ² − (சுவடு)λ + det = 0. நடு உறுப்பின் குறி கழித்தல்.'}},
+  M_TRACE_DET:{c:'eigen', en:'Reports the trace and determinant instead of solving for λ.', ta:'λ-ஐத் தீர்க்காமல் சுவடு, அணிக்கோவையைப் பதிலாகத் தருதல்.',
+    fix:{en:'Trace and det are the sum and product of the eigenvalues. Solve the quadratic to get the eigenvalues themselves.', ta:'சுவடும் det-உம் ஐகன் மதிப்புகளின் கூட்டலும் பெருக்கலும். இருபடியைத் தீர்த்து மதிப்புகளைக் காண்க.'}},
+  M_ARITH:{c:'any', en:'Arithmetic slip in a computation step.', ta:'கணக்கீட்டுப் படியில் எண்கணிதப் பிழை.',
+    fix:{en:'Redo the flagged line slowly and substitute a number to test it.', ta:'சுட்டிய வரியை மெதுவாக மீண்டும் செய்து, ஒரு எண்ணைப் பிரதியிட்டுச் சோதியுங்கள்.'}},
+  M_UNKNOWN:{c:'any', en:'An error the offline checker does not recognise.', ta:'இணையமில்லாச் சரிபார்ப்பு அறியாத பிழை.',
+    fix:{en:'Compare this line with the one before it. The AI diagnosis can explain it in detail.', ta:'இந்த வரியை முந்தைய வரியுடன் ஒப்பிடுங்கள். AI பகுப்பாய்வு விரிவாக விளக்கும்.'}}
+};
+
+const CONCEPTS = [
+ { id:'derivative', unit:'U1', co:'CO1',
+   name:{en:'Derivative as slope', ta:'வகைக்கெழு = சாய்வு'},
+   see:{en:'Drag h towards 0. The secant through P and Q turns into the tangent at P, and its slope becomes the derivative f′(x₀) = 3x₀² − 3.',
+        ta:'h-ஐ 0-ஐ நோக்கி நகர்த்துங்கள். P, Q வழியே செல்லும் வெட்டுக்கோடு P-இல் தொடுகோடாக மாறுகிறது; அதன் சாய்வே வகைக்கெழு f′(x₀) = 3x₀² − 3.'},
+   ask:[
+    {q:{en:'At x₀ = 1 the tangent to y = x³ − 3x is horizontal. What does this tell you?', ta:'x₀ = 1-இல் y = x³ − 3x-இன் தொடுகோடு கிடைமட்டமாக உள்ளது. இது எதைக் காட்டுகிறது?'},
+     opts:[
+      {t:{en:'f′(1) = 0', ta:'f′(1) = 0'}, ok:true, fb:{en:'Yes. A flat tangent has slope zero.', ta:'ஆம். கிடைமட்டத் தொடுகோட்டின் சாய்வு பூஜ்யம்.'}},
+      {t:{en:'f(1) = 0', ta:'f(1) = 0'}, mis:'M_VALUE_SLOPE', fb:{en:'f(1) = −2, not 0. Flatness is about slope, not height.', ta:'f(1) = −2, 0 அல்ல. தட்டை என்பது சாய்வைப் பற்றியது, உயரத்தை அல்ல.'}},
+      {t:{en:'f is not differentiable at 1', ta:'1-இல் f-ஐ வகையிட இயலாது'}, mis:'M_FLAT_NONDIFF', fb:{en:'It is differentiable: the derivative exists and equals 0.', ta:'வகையிட இயலும்: வகைக்கெழு உண்டு, அது 0.'}},
+      {t:{en:'f is increasing at 1', ta:'1-இல் f ஏறுகிறது'}, mis:'M_SIGN', fb:{en:'Slope 0 means neither rising nor falling at that instant.', ta:'சாய்வு 0 என்றால் அந்தக் கணத்தில் ஏறவும் இல்லை, இறங்கவும் இல்லை.'}}]},
+    {q:{en:'As h → 0, the secant slope [f(x₀+h) − f(x₀)]/h …', ta:'h → 0 ஆகும்போது வெட்டுக்கோட்டுச் சாய்வு [f(x₀+h) − f(x₀)]/h …'},
+     opts:[
+      {t:{en:'approaches f′(x₀)', ta:'f′(x₀)-ஐ நெருங்குகிறது'}, ok:true, fb:{en:'Right. That limit is the definition of the derivative.', ta:'சரி. அந்த எல்லையே வகைக்கெழுவின் வரையறை.'}},
+      {t:{en:'becomes 0/0, so the derivative is undefined', ta:'0/0 ஆகிறது; எனவே வகைக்கெழு வரையறுக்கப்படவில்லை'}, mis:'M_LIMIT_SUB', fb:{en:'We never set h = 0; we watch the value as h gets close to 0.', ta:'h = 0 என வைப்பதில்லை; h 0-ஐ நெருங்கும்போது மதிப்பைக் கவனிக்கிறோம்.'}},
+      {t:{en:'approaches f(x₀)', ta:'f(x₀)-ஐ நெருங்குகிறது'}, mis:'M_VALUE_SLOPE', fb:{en:'The quotient measures steepness, so it approaches a slope, not a height.', ta:'இந்த விகிதம் சாய்வை அளக்கிறது; எனவே உயரத்தை அல்ல, சாய்வை நெருங்கும்.'}}]},
+    {q:{en:'d/dx (x² · sin x) equals', ta:'d/dx (x² · sin x) = ?'},
+     opts:[
+      {t:{en:'2x sin x + x² cos x', ta:'2x sin x + x² cos x'}, ok:true, fb:{en:'Correct: u′v + uv′.', ta:'சரி: u′v + uv′.'}},
+      {t:{en:'2x · cos x', ta:'2x · cos x'}, mis:'M_PRODUCT', fb:{en:'That multiplies the two derivatives. The product rule has two terms.', ta:'இது இரண்டு வகைக்கெழுக்களைப் பெருக்குகிறது. பெருக்கல் விதியில் இரண்டு உறுப்புகள் உள்ளன.'}},
+      {t:{en:'2x sin x − x² cos x', ta:'2x sin x − x² cos x'}, mis:'M_SIGN_TRIG', fb:{en:'(sin x)′ = +cos x. The minus sign belongs to (cos x)′.', ta:'(sin x)′ = +cos x. எதிர்க்குறி (cos x)′-க்கு மட்டுமே.'}}]}
+   ],
+   check:{type:'expr', f:'x^2*sin(x)', target:'2*x*sin(x)+x^2*cos(x)',
+     prompt:{en:'Differentiate y = x² sin x. Write one step per line.', ta:'y = x² sin x-ஐ வகையிடுக. ஒரு வரிக்கு ஒரு படி எழுதுக.'},
+     sigs:[['2*x*cos(x)','M_PRODUCT'],['2*x+cos(x)','M_PRODUCT'],['2*x*sin(x)-x^2*cos(x)','M_SIGN_TRIG'],['-2*x*sin(x)+x^2*cos(x)','M_SIGN_TRIG'],['2*x*sin(x)','M_PRODUCT_HALF'],['x^2*cos(x)','M_PRODUCT_HALF']],
+     example:"y = x^2 sin x\ny' = d/dx(x^2) · d/dx(sin x)\ny' = 2x cos x",
+     sol:{en:'Product rule with u = x², v = sin x:\ny′ = u′v + uv′\n   = 2x · sin x + x² · cos x', ta:'பெருக்கல் விதி, u = x², v = sin x:\ny′ = u′v + uv′\n   = 2x · sin x + x² · cos x'}}
+ },
+ { id:'extrema', unit:'U1', co:'CO2',
+   name:{en:'Maxima and minima', ta:'பெருமம், சிறுமம்'},
+   see:{en:'The top graph is f(x) = x³ − ax; the bottom graph is f′(x). Where f′ is above the axis the curve rises (green); below, it falls. Set a = 0: f′(0) = 0 but there is no turning point.',
+        ta:'மேல் வரைபடம் f(x) = x³ − ax; கீழே f′(x). f′ அச்சுக்கு மேலே இருக்கும் இடத்தில் வளைவு ஏறுகிறது (பச்சை); கீழே இறங்குகிறது. a = 0 என வையுங்கள்: f′(0) = 0, ஆனால் திருப்புப் புள்ளி இல்லை.'},
+   ask:[
+    {q:{en:'f′(c) = 0. Is c always a maximum or a minimum?', ta:'f′(c) = 0. c எப்போதும் பெருமம் அல்லது சிறுமமா?'},
+     opts:[
+      {t:{en:'No. f′ must also change sign at c', ta:'இல்லை. c-இல் f′ குறியும் மாற வேண்டும்'}, ok:true, fb:{en:'Right. y = x³ at 0 is the classic counter-example.', ta:'சரி. 0-இல் y = x³ ஒரு சிறந்த எதிர் உதாரணம்.'}},
+      {t:{en:'Yes, always', ta:'ஆம், எப்போதும்'}, mis:'M_CRIT_ALWAYS_EXT', fb:{en:'Try a = 0 in the See tab: f′(0) = 0 yet the curve never turns.', ta:'பார் பகுதியில் a = 0 வையுங்கள்: f′(0) = 0, ஆனால் வளைவு திரும்பவில்லை.'}},
+      {t:{en:'Only if f(c) = 0', ta:'f(c) = 0 எனில் மட்டும்'}, mis:'M_VALUE_SLOPE', fb:{en:'The height f(c) has nothing to do with whether c is a turning point.', ta:'c திருப்புப் புள்ளியா என்பதற்கும் உயரம் f(c)-க்கும் தொடர்பில்லை.'}}]},
+    {q:{en:'For f(x) = x³ − 3x, f″(1) = 6 > 0. So x = 1 is', ta:'f(x) = x³ − 3x-க்கு f″(1) = 6 > 0. எனவே x = 1 என்பது'},
+     opts:[
+      {t:{en:'a local minimum', ta:'உள்ளூர்ச் சிறுமம்'}, ok:true, fb:{en:'Yes. Bending up like a cup means a minimum.', ta:'ஆம். கிண்ணம் போல் மேல்நோக்கி வளைதல் சிறுமம்.'}},
+      {t:{en:'a local maximum', ta:'உள்ளூர்ப் பெருமம்'}, mis:'M_SECOND_DERIV_SIGN', fb:{en:'Positive f″ bends the curve up, so the point sits at the bottom.', ta:'நேர் f″ வளைவை மேல்நோக்கி வளைக்கிறது; எனவே புள்ளி அடியில் இருக்கும்.'}},
+      {t:{en:'a point of inflection', ta:'வளைவு மாற்றப் புள்ளி'}, mis:'M_INFLECT', fb:{en:'Inflection needs f″ = 0 and a change of bend. Here f″ = 6.', ta:'வளைவு மாற்றத்திற்கு f″ = 0 தேவை. இங்கே f″ = 6.'}}]}
+   ],
+   check:{type:'crit', fprime:'6*x^2-18*x+12', fsecond:'12*x-18', expect:[{x:1,t:'max'},{x:2,t:'min'}],
+     prompt:{en:'Find the critical points of f(x) = 2x³ − 9x² + 12x and classify each as a maximum or minimum.', ta:'f(x) = 2x³ − 9x² + 12x-இன் மாறுநிலைப் புள்ளிகளைக் கண்டு, ஒவ்வொன்றும் பெருமமா சிறுமமா என வகைப்படுத்துக.'},
+     example:"f'(x) = 6x^2 - 18x + 12\n6(x - 1)(x - 2) = 0\nf''(x) = 12x - 18\nx = 1 min, x = 2 max",
+     sol:{en:'f′(x) = 6x² − 18x + 12 = 6(x − 1)(x − 2) = 0  ⇒  x = 1, 2\nf″(x) = 12x − 18\nf″(1) = −6 < 0  ⇒  x = 1 is a maximum\nf″(2) = 6 > 0  ⇒  x = 2 is a minimum', ta:'f′(x) = 6x² − 18x + 12 = 6(x − 1)(x − 2) = 0  ⇒  x = 1, 2\nf″(x) = 12x − 18\nf″(1) = −6 < 0  ⇒  x = 1 பெருமம்\nf″(2) = 6 > 0  ⇒  x = 2 சிறுமம்'}}
+ },
+ { id:'lintrans', unit:'U2', co:'CO3',
+   name:{en:'Matrix as a transformation', ta:'அணி = உருமாற்றம்'},
+   see:{en:'A 2×2 matrix moves the whole grid. Column 1 is where î lands, column 2 is where ĵ lands. The shaded square shows that det A is the area scale factor; a negative det flips the plane over.',
+        ta:'2×2 அணி முழு வலையையும் நகர்த்துகிறது. நிரல் 1 என்பது î செல்லும் இடம், நிரல் 2 என்பது ĵ செல்லும் இடம். நிழலிட்ட சதுரம் det A பரப்பளவுப் பெருக்கக் காரணி என்பதைக் காட்டுகிறது; எதிர் det தளத்தைப் புரட்டுகிறது.'},
+   ask:[
+    {q:{en:'For A = [[2, 1], [0, 1]], where does î = (1, 0) land?', ta:'A = [[2, 1], [0, 1]]-க்கு î = (1, 0) எங்கு செல்கிறது?'},
+     opts:[
+      {t:{en:'(2, 0), the first column', ta:'(2, 0), முதல் நிரல்'}, ok:true, fb:{en:'Yes. A·î picks out the first column.', ta:'ஆம். A·î முதல் நிரலைத் தருகிறது.'}},
+      {t:{en:'(2, 1), the first row', ta:'(2, 1), முதல் நிரை'}, mis:'M_ROW_COL', fb:{en:'Rows mix the coordinates; columns are the images of î and ĵ.', ta:'நிரைகள் ஆயங்களைக் கலக்கின்றன; நிரல்களே î, ĵ-இன் பிம்பங்கள்.'}},
+      {t:{en:'(1, 1)', ta:'(1, 1)'}, mis:'M_ARITH', fb:{en:'Multiply it out: [[2,1],[0,1]]·(1,0) = (2, 0).', ta:'பெருக்கிப் பாருங்கள்: [[2,1],[0,1]]·(1,0) = (2, 0).'}}]},
+    {q:{en:'det A = 0 means', ta:'det A = 0 என்றால்'},
+     opts:[
+      {t:{en:'the plane is squashed onto a line or a point', ta:'தளம் ஒரு கோட்டில் அல்லது புள்ளியில் நசுக்கப்படுகிறது'}, ok:true, fb:{en:'Right. Area becomes zero, so A has no inverse.', ta:'சரி. பரப்பளவு பூஜ்யமாகிறது; எனவே A-க்கு நேர்மாறு இல்லை.'}},
+      {t:{en:'A is the zero matrix', ta:'A பூஜ்ய அணி'}, mis:'M_DET_ZERO_MATRIX', fb:{en:'[[1, 2], [2, 4]] has det 0 but is not the zero matrix. Try the "Squash" preset.', ta:'[[1, 2], [2, 4]]-இன் det 0, ஆனால் அது பூஜ்ய அணி அல்ல. "Squash" அமைப்பைப் பாருங்கள்.'}},
+      {t:{en:'A flips orientation', ta:'A திசையமைப்பைப் புரட்டுகிறது'}, mis:'M_DET_ABS', fb:{en:'Flipping is a negative determinant. Zero means collapse.', ta:'புரட்டுதல் என்பது எதிர் det. பூஜ்யம் என்றால் சுருக்கம்.'}}]}
+   ],
+   check:{type:'num', answer:-5, sigs:{'11':'M_DET_SIGN','10':'M_DET_DIAG','5':'M_DET_ABS','-10':'M_DET_DIAG'},
+     prompt:{en:'Find det A for A = [[3, 2], [4, 1]].', ta:'A = [[3, 2], [4, 1]]-க்கு det A காண்க.'},
+     example:'det A = 3×1 + 2×4\n= 11',
+     sol:{en:'det A = ad − bc = 3×1 − 2×4 = 3 − 8 = −5\nThe negative sign means A flips orientation; the area scale factor is 5.', ta:'det A = ad − bc = 3×1 − 2×4 = 3 − 8 = −5\nஎதிர்க்குறி: A திசையமைப்பைப் புரட்டுகிறது; பரப்பளவுக் காரணி 5.'}}
+ },
+ { id:'eigen', unit:'U2', co:'CO4',
+   name:{en:'Eigenvalues and eigenvectors', ta:'ஐகன் மதிப்புகள், வெக்டர்கள்'},
+   see:{en:'Turn the blue vector u and watch Au (green). Most directions get turned. When Au lies on the same line as u, u is an eigenvector and the stretch factor is the eigenvalue λ.',
+        ta:'நீல வெக்டர் u-ஐச் சுழற்றி Au-ஐ (பச்சை) கவனியுங்கள். பெரும்பாலான திசைகள் திருப்பப்படுகின்றன. Au, u-இன் அதே கோட்டில் இருக்கும்போது u ஒரு ஐகன் வெக்டர்; நீட்சிக் காரணியே ஐகன் மதிப்பு λ.'},
+   ask:[
+    {q:{en:'Av = λv means', ta:'Av = λv என்றால்'},
+     opts:[
+      {t:{en:'A only stretches v; it does not turn it', ta:'A, v-ஐ நீட்டுகிறது மட்டுமே; திருப்புவதில்லை'}, ok:true, fb:{en:'Exactly. v keeps its direction (or reverses if λ < 0).', ta:'சரியே. v தன் திசையை வைத்திருக்கும் (λ < 0 எனில் எதிர்த்திசை).'}},
+      {t:{en:'Av is perpendicular to v', ta:'Av, v-க்குச் செங்குத்து'}, mis:'M_EIG_PERP', fb:{en:'Perpendicular would be a turn of 90°. Eigenvectors are not turned at all.', ta:'செங்குத்து என்பது 90° திருப்பம். ஐகன் வெக்டர்கள் திருப்பப்படுவதே இல்லை.'}},
+      {t:{en:'λ is one of the entries of A', ta:'λ என்பது A-இன் ஓர் உறுப்பு'}, mis:'M_EIGEN_DIAG', fb:{en:'Not in general. λ comes from det(A − λI) = 0.', ta:'பொதுவாக இல்லை. λ, det(A − λI) = 0-இலிருந்து வருகிறது.'}}]},
+    {q:{en:'The eigenvalues of [[2, 1], [1, 2]] are', ta:'[[2, 1], [1, 2]]-இன் ஐகன் மதிப்புகள்'},
+     opts:[
+      {t:{en:'3 and 1', ta:'3, 1'}, ok:true, fb:{en:'Yes: λ² − 4λ + 3 = 0. Check in the See tab: u along (1,1) is stretched by 3.', ta:'ஆம்: λ² − 4λ + 3 = 0. பார் பகுதியில் (1,1) திசையில் u, 3 மடங்கு நீள்கிறது.'}},
+      {t:{en:'2 and 2', ta:'2, 2'}, mis:'M_EIGEN_DIAG', fb:{en:'The diagonal gives eigenvalues only for triangular matrices.', ta:'முக்கோண அணிகளுக்கு மட்டுமே மூலைவிட்டம் ஐகன் மதிப்புகளைத் தரும்.'}},
+      {t:{en:'−3 and −1', ta:'−3, −1'}, mis:'M_CHAR_EQ_SIGN', fb:{en:'The equation is λ² − 4λ + 3 = 0, so both roots are positive.', ta:'சமன்பாடு λ² − 4λ + 3 = 0; இரண்டு மூலங்களும் நேர்.'}}]}
+   ],
+   check:{type:'set', answer:[5,2], poly:'x^2-7*x+10', sigs:[[[4,3],'M_EIGEN_DIAG'],[[-5,-2],'M_CHAR_EQ_SIGN'],[[7,10],'M_TRACE_DET']],
+     prompt:{en:'Find the eigenvalues of A = [[4, 1], [2, 3]].', ta:'A = [[4, 1], [2, 3]]-இன் ஐகன் மதிப்புகளைக் காண்க.'},
+     example:'det(A - λI) = (4 - λ)(3 - λ) - 2\nλ^2 - 7λ + 10 = 0\nλ = 4, 3',
+     sol:{en:'det(A − λI) = (4 − λ)(3 − λ) − 2 = λ² − 7λ + 10 = 0\n(λ − 5)(λ − 2) = 0  ⇒  λ = 5, 2\nCheck: 5 + 2 = 7 = trace, 5 × 2 = 10 = det.', ta:'det(A − λI) = (4 − λ)(3 − λ) − 2 = λ² − 7λ + 10 = 0\n(λ − 5)(λ − 2) = 0  ⇒  λ = 5, 2\nசரிபார்ப்பு: 5 + 2 = 7 = சுவடு, 5 × 2 = 10 = det.'}}
+ }
+];
+
+const UNITS = {
+  U1:{en:'Unit I · Differential calculus', ta:'அலகு I · வகை நுண்கணிதம்'},
+  U2:{en:'Unit II · Matrices', ta:'அலகு II · அணிகள்'}
+};
+
+/* ---------- College side ---------- */
+const POS = [
+  ['PO1','Engineering knowledge'],['PO2','Problem analysis'],['PO3','Design of solutions'],['PO4','Investigation of complex problems'],
+  ['PO5','Modern tool usage'],['PO6','Engineer and society'],['PO7','Environment and sustainability'],['PO8','Ethics'],
+  ['PO9','Individual and team work'],['PO10','Communication'],['PO11','Project management and finance'],['PO12','Life-long learning']
+];
+const BLOOM = {1:'K1 Remember',2:'K2 Understand',3:'K3 Apply',4:'K4 Analyse',5:'K5 Evaluate',6:'K6 Create'};
+
+const DEFAULT_COURSE = {
+  code:'MA101', name:'Engineering Mathematics I',
+  cos:[
+    {id:'CO1', text:'Apply limits and derivatives to find rates of change of engineering quantities.'},
+    {id:'CO2', text:'Locate and classify extrema of functions to solve engineering optimisation problems.'},
+    {id:'CO3', text:'Interpret matrices as linear transformations and compute ranks and determinants.'},
+    {id:'CO4', text:'Compute eigenvalues and eigenvectors and apply them to engineering systems.'},
+    {id:'CO5', text:'Evaluate definite integrals for areas, averages and work done.'}
+  ],
+  map:{
+    CO1:{PO1:3,PO2:2,PO12:1}, CO2:{PO1:3,PO2:3,PO3:2,PO12:1}, CO3:{PO1:3,PO2:2,PO5:1},
+    CO4:{PO1:3,PO2:2,PO4:2,PO5:1}, CO5:{PO1:3,PO2:2,PO12:1}
+  },
+  bank:[
+    {id:'A101',co:'CO1',k:1,m:2,d:1,t:'State the definition of the derivative of f(x) at x = a as a limit.'},
+    {id:'A102',co:'CO1',k:2,m:2,d:1,t:'Explain geometrically why f′(a) = 0 at a point where the tangent is horizontal.'},
+    {id:'A103',co:'CO1',k:3,m:2,d:2,t:'Differentiate y = x² sin x.'},
+    {id:'A104',co:'CO1',k:3,m:2,d:2,t:'Find dy/dx if y = e^(3x) cos 2x.'},
+    {id:'A201',co:'CO2',k:1,m:2,d:1,t:'Define a critical point of a function.'},
+    {id:'A202',co:'CO2',k:2,m:2,d:1,t:'State the second derivative test for local extrema.'},
+    {id:'A203',co:'CO2',k:3,m:2,d:2,t:'Find the critical points of f(x) = x³ − 3x.'},
+    {id:'A204',co:'CO2',k:2,m:2,d:2,t:'Give an example of a function with f′(c) = 0 where c is not an extremum.'},
+    {id:'A301',co:'CO3',k:1,m:2,d:1,t:'Define the rank of a matrix.'},
+    {id:'A302',co:'CO3',k:2,m:2,d:2,t:'What does det A = 0 mean geometrically for a 2×2 matrix A?'},
+    {id:'A303',co:'CO3',k:3,m:2,d:1,t:'Find the determinant of A = [[3, 2], [4, 1]].'},
+    {id:'A304',co:'CO3',k:2,m:2,d:2,t:'Write the matrix of a rotation of the plane through 90° anticlockwise.'},
+    {id:'A401',co:'CO4',k:1,m:2,d:1,t:'Define an eigenvalue and an eigenvector of a square matrix.'},
+    {id:'A402',co:'CO4',k:3,m:2,d:2,t:'Find the eigenvalues of A = [[4, 1], [2, 3]].'},
+    {id:'A403',co:'CO4',k:2,m:2,d:1,t:'State any two properties of eigenvalues.'},
+    {id:'A404',co:'CO4',k:3,m:2,d:2,t:'If 2 and 3 are the eigenvalues of A, find the eigenvalues of A².'},
+    {id:'A501',co:'CO5',k:1,m:2,d:1,t:'State the fundamental theorem of calculus.'},
+    {id:'A502',co:'CO5',k:3,m:2,d:1,t:'Evaluate ∫₀^π sin x dx.'},
+    {id:'A503',co:'CO5',k:2,m:2,d:2,t:'Explain why ∫₋₁¹ x³ dx = 0 without computing it.'},
+    {id:'A504',co:'CO5',k:3,m:2,d:2,t:'Find the average value of f(x) = x² on [0, 3].'},
+    {id:'B101',co:'CO1',k:3,m:16,d:2,t:'(i) Find dy/dx for y = (x² + 1)/(x − 1). (ii) Using first principles, find the derivative of f(x) = √x.'},
+    {id:'B102',co:'CO1',k:3,m:16,d:2,t:'Find the equations of the tangent and the normal to the curve y = x³ − 3x at x = 2, and sketch both.'},
+    {id:'B103',co:'CO1',k:4,m:16,d:3,t:'Show that f(x) = |x| is continuous but not differentiable at x = 0. Illustrate with left and right difference quotients.'},
+    {id:'B104',co:'CO1',k:4,m:16,d:3,t:'If y = sin⁻¹x, prove that (1 − x²)y₂ − xy₁ = 0. Hence find yₙ(0) using Leibnitz\'s theorem.'},
+    {id:'B201',co:'CO2',k:3,m:16,d:2,t:'Find the local maxima and minima of f(x) = 2x³ − 9x² + 12x + 5 and sketch the curve.'},
+    {id:'B202',co:'CO2',k:4,m:16,d:2,t:'An open box is made from a square sheet of side 24 cm by cutting equal squares from the corners. Find the side of the square cut for maximum volume.'},
+    {id:'B203',co:'CO2',k:4,m:16,d:3,t:'A closed cylindrical tank of volume 1000 m³ is to be built with minimum surface area. Find its radius and height.'},
+    {id:'B204',co:'CO2',k:5,m:16,d:3,t:'The cost of running a truck at v km/h is C(v) = 0.02v² + 800/v rupees per km. Find the most economical speed and justify that it is a minimum.'},
+    {id:'B301',co:'CO3',k:3,m:16,d:2,t:'Find the rank of A = [[1, 2, 3], [2, 4, 7], [3, 6, 10]] by reducing it to echelon form.'},
+    {id:'B302',co:'CO3',k:3,m:16,d:2,t:'Test the consistency of x + y + z = 6, x + 2y + 3z = 14, x + 4y + 7z = 30 and solve if consistent.'},
+    {id:'B303',co:'CO3',k:4,m:16,d:3,t:'Describe how A = [[2, 1], [0, 1]] transforms the unit square. Find the area of the image and explain the result using det A.'},
+    {id:'B304',co:'CO3',k:4,m:16,d:3,t:'Show that the matrix of reflection in the line y = x is orthogonal. Find its determinant and inverse, and interpret both.'},
+    {id:'B401',co:'CO4',k:3,m:16,d:2,t:'Find the eigenvalues and eigenvectors of A = [[2, 2, 1], [1, 3, 1], [1, 2, 2]].'},
+    {id:'B402',co:'CO4',k:3,m:16,d:2,t:'Verify the Cayley–Hamilton theorem for A = [[1, 2], [3, 4]] and hence find A⁻¹.'},
+    {id:'B403',co:'CO4',k:4,m:16,d:3,t:'Diagonalise A = [[2, 0, 4], [0, 6, 0], [4, 0, 2]] by an orthogonal transformation.'},
+    {id:'B404',co:'CO4',k:5,m:16,d:3,t:'Two masses connected by springs have stiffness matrix K = [[2k, −k], [−k, 2k]] and equal masses m. Find the natural frequencies and interpret the mode shapes.'},
+    {id:'B501',co:'CO5',k:3,m:16,d:2,t:'Evaluate ∫ x² eˣ dx using integration by parts, and hence ∫₀¹ x² eˣ dx.'},
+    {id:'B502',co:'CO5',k:3,m:16,d:2,t:'Find the area enclosed between the curves y = x² and y = 2x, with a sketch.'},
+    {id:'B503',co:'CO5',k:4,m:16,d:3,t:'Using Bernoulli\'s formula, evaluate ∫₀¹ x³ e^(2x) dx and compare it with a trapezoidal estimate using 4 strips.'},
+    {id:'B504',co:'CO5',k:5,m:16,d:3,t:'A force F(x) = 3x² + 2x N moves a body from x = 0 to x = 4 m. Find the work done and justify why integration is needed.'}
+  ]
+};
+
+const SECTIONS = ['I-A (Mech)','I-B (Civil)','I-C (ECE)','I-D (CSE)'];
+
+/* ---------- GanitaDrishti: logic (no DOM) ---------- */
+
+/* Expression parser: plain-text maths -> function of x */
+function parseExpr(src){
+  let s = String(src).toLowerCase()
+    .replace(/[−–]/g,'-').replace(/[×·∙]/g,'*').replace(/÷/g,'/')
+    .replace(/²/g,'^2').replace(/³/g,'^3').replace(/π/g,'pi').replace(/λ/g,'x')
+    .replace(/\*\*/g,'^');
+  const toks = []; let i = 0; let usesVar = false;
+  while (i < s.length){
+    const c = s[i];
+    if (c === ' ' || c === '\t'){ i++; continue; }
+    if (/[0-9.]/.test(c)){ let j = i; while (j < s.length && /[0-9.]/.test(s[j])) j++; const v = parseFloat(s.slice(i,j)); if (!isFinite(v)) throw new Error('num'); toks.push({t:'num',v}); i = j; continue; }
+    if (/[a-z]/.test(c)){
+      let j = i; while (j < s.length && /[a-z]/.test(s[j])) j++;
+      let w = s.slice(i,j); i = j;
+      while (w.length){
+        const fn = ['sqrt','sin','cos','tan','exp','ln','log','pi'].find(f => w.startsWith(f));
+        if (fn){ toks.push(fn === 'pi' ? {t:'num',v:Math.PI} : {t:'fn',v:fn}); w = w.slice(fn.length); }
+        else if (w[0] === 'x'){ toks.push({t:'var'}); usesVar = true; w = w.slice(1); }
+        else if (w[0] === 'e'){ toks.push({t:'num',v:Math.E}); w = w.slice(1); }
+        else throw new Error('word');
+      }
+      continue;
+    }
+    if ('+-*/^()'.includes(c)){ toks.push({t:'op',v:c}); i++; continue; }
+    throw new Error('char');
+  }
+  const out = [];
+  for (const b of toks){
+    const a = out[out.length-1];
+    const endsVal = a && (a.t === 'num' || a.t === 'var' || (a.t === 'op' && a.v === ')'));
+    const startsVal = b.t === 'num' || b.t === 'var' || b.t === 'fn' || (b.t === 'op' && b.v === '(');
+    if (endsVal && startsVal) out.push({t:'op',v:'*',imp:true});
+    out.push(b);
+  }
+  let p = 0;
+  const peek = () => out[p];
+  const isOp = (v) => peek() && peek().t === 'op' && peek().v === v;
+  const F = {sin:Math.sin, cos:Math.cos, tan:Math.tan, exp:Math.exp, ln:Math.log, log:Math.log, sqrt:Math.sqrt};
+  function expr(){ let n = term(); while (isOp('+') || isOp('-')){ const o = out[p++].v; const r = term(); const l = n; n = o === '+' ? x => l(x) + r(x) : x => l(x) - r(x); } return n; }
+  function term(){ let n = unary(); while (isOp('*') || isOp('/')){ const o = out[p++].v; const r = unary(); const l = n; n = o === '*' ? x => l(x) * r(x) : x => l(x) / r(x); } return n; }
+  function unary(){ if (isOp('-')){ p++; const u = unary(); return x => -u(x); } if (isOp('+')){ p++; return unary(); } return power(); }
+  function power(){ const b = atom(); if (isOp('^')){ p++; const e = unary(); return x => Math.pow(b(x), e(x)); } return b; }
+  function atom(){
+    const tk = out[p++]; if (!tk) throw new Error('end');
+    if (tk.t === 'num'){ const v = tk.v; return () => v; }
+    if (tk.t === 'var') return x => x;
+    if (tk.t === 'fn'){
+      const f = F[tk.v]; let pw = null;
+      if (isOp('^')){ p++; pw = atom(); }
+      let arg;
+      if (isOp('(')) arg = atom();
+      else {
+        arg = power();
+        while (peek() && peek().imp && out[p+1] && out[p+1].t !== 'fn'){ p++; const r = power(); const l = arg; arg = x => l(x) * r(x); }
+      }
+      return pw ? x => Math.pow(f(arg(x)), pw(x)) : x => f(arg(x));
+    }
+    if (tk.t === 'op' && tk.v === '('){ const n = expr(); const c = out[p++]; if (!c || c.v !== ')') throw new Error('paren'); return n; }
+    throw new Error('unexpected');
+  }
+  if (!out.length) throw new Error('empty');
+  const fn = expr();
+  if (p !== out.length) throw new Error('trailing');
+  fn.usesVar = usesVar;
+  return fn;
+}
+function tryParse(s){ try { const f = parseExpr(s); const v = f(0.731); if (typeof v !== 'number') return null; return f; } catch (e) { return null; } }
+
+const PTS = [0.37, 1.13, 2.41, -0.83, 1.71];
+function sameFn(f, g){
+  for (const x of PTS){ const a = f(x), b = g(x); if (!isFinite(a) || !isFinite(b)) return false; if (Math.abs(a - b) > 1e-6 * (1 + Math.abs(b))) return false; }
+  return true;
+}
+function proportional(f, g){
+  let r = null;
+  for (const x of PTS){
+    const a = f(x), b = g(x); if (!isFinite(a) || !isFinite(b)) return false;
+    if (Math.abs(b) < 1e-9){ if (Math.abs(a) > 1e-6) return false; continue; }
+    const q = a / b; if (r === null) r = q; else if (Math.abs(q - r) > 1e-6 * (1 + Math.abs(r))) return false;
+  }
+  return r !== null && Math.abs(r) > 1e-9;
+}
+function splitEq(line){ const parts = line.split('='); return {lhs: parts.slice(0, -1).join('=').trim(), rhs: parts[parts.length - 1].trim(), hasEq: parts.length > 1}; }
+function numsIn(s){
+  const clean = String(s).replace(/[−–]/g,'-').replace(/[a-zA-Zλ]+_?\d+/g,' ');
+  return (clean.match(/-?\d+(?:\.\d+)?(?:\/\d+)?/g) || []).map(t => { if (t.includes('/')){ const [a,b] = t.split('/'); return parseFloat(a)/parseFloat(b); } return parseFloat(t); });
+}
+const close = (a, b, tol = 1e-6) => Math.abs(a - b) <= tol * (1 + Math.abs(b));
+function sameSet(a, b){ if (a.length !== b.length) return false; const x = [...a].sort((p,q)=>p-q), y = [...b].sort((p,q)=>p-q); return x.every((v,i) => close(v, y[i], 1e-4)); }
+
+/* Offline step checker. Returns {status:'ok'|'wrong'|'partial'|'unread', line, mis, note} (line is 0-based) */
+function localCheck(cfg, text){
+  const lines = String(text).split('\n');
+  const idx = lines.map((l,i) => l.trim() ? i : -1).filter(i => i >= 0);
+  if (!idx.length) return {status:'unread'};
+  if (cfg.type === 'expr') return checkExpr(cfg, lines, idx);
+  if (cfg.type === 'crit') return checkCrit(cfg, lines, idx);
+  if (cfg.type === 'num') return checkNum(cfg, lines, idx);
+  if (cfg.type === 'set') return checkSet(cfg, lines, idx);
+  return {status:'unread'};
+}
+function checkExpr(cfg, lines, idx){
+  const f = parseExpr(cfg.f), tgt = parseExpr(cfg.target);
+  const sigs = cfg.sigs.map(([e, m]) => [parseExpr(e), m]);
+  let flagged = null, lastParsed = -1, lastOk = false, any = false;
+  for (const i of idx){
+    const g = tryParse(splitEq(lines[i]).rhs); if (!g) continue;
+    any = true; lastParsed = i;
+    if (sameFn(g, f)){ lastOk = false; continue; }
+    if (sameFn(g, tgt)){ lastOk = true; continue; }
+    lastOk = false;
+    if (!flagged){ const m = sigs.find(([s]) => sameFn(g, s)); flagged = {line:i, mis: m ? m[1] : 'M_UNKNOWN'}; }
+  }
+  if (!any) return {status:'unread'};
+  if (flagged) return {status:'wrong', ...flagged};
+  if (lastOk) return {status:'ok'};
+  return {status:'partial', line:lastParsed, note:'unfinished'};
+}
+function classifyWord(s){ s = s.toLowerCase(); if (/max|பெரும/.test(s)) return 'max'; if (/min|சிறும/.test(s)) return 'min'; return null; }
+function checkCrit(cfg, lines, idx){
+  const fp = parseExpr(cfg.fprime), fpp = parseExpr(cfg.fsecond);
+  let flagged = null;
+  const flag = (i, m) => { if (!flagged) flagged = {line:i, mis:m}; };
+  let ansLines = idx.filter(i => classifyWord(lines[i]));
+  if (!ansLines.length) ansLines = [idx[idx.length - 1]];
+  for (const i of idx){
+    if (ansLines.includes(i)) continue;
+    const ln = lines[i]; const {lhs, rhs, hasEq} = splitEq(ln); if (!hasEq) continue;
+    const L = lhs.replace(/\s/g,'').toLowerCase();
+    if (/f''|f″|y''|y″|d2y/.test(L)){ const g = tryParse(rhs); if (g && !sameFn(g, fpp)) flag(i, 'M_ARITH'); }
+    else if (/f'|f′|y'|y′|dy\/dx/.test(L)){ const g = tryParse(rhs); if (g && !sameFn(g, fp) && !proportional(g, fp)) flag(i, 'M_ARITH'); }
+    else if (rhs === '0'){ const g = tryParse(lhs); if (g && g.usesVar && !proportional(g, fp)) flag(i, 'M_FACTOR'); }
+  }
+  const pts = [];
+  for (const i of ansLines){
+    for (const seg of lines[i].split(/[,;]|\band\b|மற்றும்/)){
+      const m = seg.match(/x\s*=\s*(-?\d+(?:\.\d+)?(?:\/\d+)?)/i);
+      const n = m ? numsIn(m[1]) : numsIn(seg);
+      if (n.length) pts.push({x:n[0], t:classifyWord(seg)});
+    }
+  }
+  const ansLine = ansLines[ansLines.length - 1];
+  if (flagged) return {status:'wrong', ...flagged};
+  if (!pts.length) return {status:'unread'};
+  const xs = pts.map(p => p.x), ex = cfg.expect.map(e => e.x);
+  if (!sameSet(xs, ex)) return {status:'wrong', line:ansLine, mis:'M_FACTOR'};
+  const typed = pts.filter(p => p.t);
+  if (!typed.length) return {status:'partial', line:ansLine, note:'classify'};
+  const right = pts.every(p => { const e = cfg.expect.find(q => close(q.x, p.x, 1e-4)); return p.t === e.t; });
+  if (right && typed.length === pts.length) return {status:'ok'};
+  const swapped = typed.every(p => { const e = cfg.expect.find(q => close(q.x, p.x, 1e-4)); return p.t !== e.t; });
+  if (swapped) return {status:'wrong', line:ansLine, mis:'M_SECOND_DERIV_SIGN'};
+  return {status:'partial', line:ansLine, note:'classify'};
+}
+function checkNum(cfg, lines, idx){
+  let flagged = null, last = null, lastLine = -1;
+  for (const i of idx){
+    const g = tryParse(splitEq(lines[i]).rhs);
+    if (!g || g.usesVar) continue;
+    const v = g(0); if (!isFinite(v)) continue;
+    last = v; lastLine = i;
+    if (!close(v, cfg.answer, 1e-6) && !flagged){
+      const key = String(Math.round(v * 1000) / 1000);
+      flagged = {line:i, mis: cfg.sigs[key] || 'M_ARITH'};
+    }
+  }
+  if (last === null) return {status:'unread'};
+  if (flagged) return {status:'wrong', ...flagged};
+  return close(last, cfg.answer, 1e-6) ? {status:'ok'} : {status:'wrong', line:lastLine, mis:'M_ARITH'};
+}
+function checkSet(cfg, lines, idx){
+  const P = parseExpr(cfg.poly);
+  let flagged = null;
+  const ansLine = idx[idx.length - 1];
+  for (const i of idx){
+    if (i === ansLine) continue;
+    const {lhs, rhs, hasEq} = splitEq(lines[i]);
+    let g = null;
+    if (hasEq && rhs === '0') g = tryParse(lhs); else g = tryParse(rhs);
+    if (g && g.usesVar && !proportional(g, P) && !flagged) flagged = {line:i, mis:'M_CHAR_EQ_SIGN'};
+  }
+  const vals = numsIn(lines[ansLine]);
+  if (!vals.length) return flagged ? {status:'wrong', ...flagged} : {status:'unread'};
+  if (sameSet(vals, cfg.answer)) return flagged ? {status:'wrong', ...flagged} : {status:'ok'};
+  const sig = cfg.sigs.find(([s]) => sameSet(vals, s));
+  if (flagged && !sig) return {status:'wrong', ...flagged};
+  return {status:'wrong', line: flagged ? flagged.line : ansLine, mis: flagged ? flagged.mis : (sig ? sig[1] : 'M_ARITH')};
+}
+
+/* ---------- Adaptive Apply problems (engineering contexts) ---------- */
+const ri = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = a => a[Math.floor(Math.random() * a.length)];
+const r2 = v => Math.round(v * 100) / 100;
+const GEN = {
+  derivative:[
+    () => { const a = ri(2,6), b = ri(1,9), T = ri(1,5); const ans = 2*a*T + b; return {
+      q:{en:`A machine slide moves as s(t) = ${a}t² + ${b}t metres. Find its velocity at t = ${T} s (in m/s).`, ta:`ஓர் இயந்திர நகர்வி s(t) = ${a}t² + ${b}t மீட்டர் என நகர்கிறது. t = ${T} வி-இல் அதன் திசைவேகம் (m/s) காண்க.`},
+      ans, unit:'m/s', mis:'M_ARITH',
+      sol:{en:`v(t) = s′(t) = ${2*a}t + ${b}\nv(${T}) = ${2*a}×${T} + ${b} = ${ans} m/s`, ta:`v(t) = s′(t) = ${2*a}t + ${b}\nv(${T}) = ${2*a}×${T} + ${b} = ${ans} m/s`}}; },
+    () => { const Q = ri(2,6), w = pick([1,2,3]), T = pick([0.5,1]); const ans = r2(Q*w*Math.cos(w*T)); return {
+      q:{en:`The charge on a capacitor is q(t) = ${Q} sin(${w}t) mC. Find the current i = dq/dt at t = ${T} s (in mA, 2 decimals).`, ta:`ஒரு மின்தேக்கியின் மின்னூட்டம் q(t) = ${Q} sin(${w}t) mC. t = ${T} வி-இல் மின்னோட்டம் i = dq/dt (mA, 2 தசமம்) காண்க.`},
+      ans, unit:'mA', tol:0.02, mis:'M_SIGN_TRIG',
+      sol:{en:`i(t) = dq/dt = ${Q}×${w} cos(${w}t) = ${Q*w} cos(${w}t)\ni(${T}) = ${Q*w} cos(${r2(w*T)}) ≈ ${ans} mA`, ta:`i(t) = dq/dt = ${Q*w} cos(${w}t)\ni(${T}) = ${Q*w} cos(${r2(w*T)}) ≈ ${ans} mA`}}; },
+    () => { const T = pick([1,2]); const ans = r2(2*T*Math.sin(T) + T*T*Math.cos(T)); return {
+      q:{en:`A robot arm tip moves as s(t) = t² sin t metres. Find its velocity at t = ${T} s (m/s, 2 decimals).`, ta:`ஒரு ரோபோ கையின் முனை s(t) = t² sin t மீட்டர் என நகர்கிறது. t = ${T} வி-இல் திசைவேகம் (m/s, 2 தசமம்) காண்க.`},
+      ans, unit:'m/s', tol:0.02, mis:'M_PRODUCT',
+      sol:{en:`Product rule: v = 2t sin t + t² cos t\nv(${T}) = ${2*T} sin ${T} + ${T*T} cos ${T} ≈ ${ans} m/s`, ta:`பெருக்கல் விதி: v = 2t sin t + t² cos t\nv(${T}) = ${2*T} sin ${T} + ${T*T} cos ${T} ≈ ${ans} m/s`}}; }
+  ],
+  extrema:[
+    () => { const L = pick([4,6,8,10,12]), w = ri(2,9); const ans = L/2; return {
+      q:{en:`A simply supported beam of span ${L} m carries a uniform load of ${w} kN/m. Its bending moment is M(x) = (${w}/2)(${L}x − x²). At what distance x (m) is M maximum?`, ta:`${L} m நீளமுள்ள எளிதாகத் தாங்கப்பட்ட உத்திரம் ${w} kN/m சீரான சுமையைத் தாங்குகிறது. M(x) = (${w}/2)(${L}x − x²). எந்தத் தொலைவில் x (m) M பெருமம்?`},
+      ans, unit:'m', mis:'M_FACTOR',
+      sol:{en:`M′(x) = (${w}/2)(${L} − 2x) = 0  ⇒  x = ${ans} m\nM″(x) = −${w} < 0, so it is a maximum.`, ta:`M′(x) = (${w}/2)(${L} − 2x) = 0  ⇒  x = ${ans} m\nM″(x) = −${w} < 0; எனவே பெருமம்.`}}; },
+    () => { const a = pick([12,18,24,30,36]); const ans = a/6; return {
+      q:{en:`An open box is made from a square sheet of side ${a} cm by cutting equal squares of side x from each corner. Find x (cm) for maximum volume.`, ta:`${a} cm பக்கமுள்ள சதுரத் தகட்டின் மூலைகளிலிருந்து x பக்கமுள்ள சதுரங்களை வெட்டித் திறந்த பெட்டி செய்யப்படுகிறது. பெரும கனஅளவிற்கு x (cm) காண்க.`},
+      ans, unit:'cm', mis:'M_FACTOR',
+      sol:{en:`V = x(${a} − 2x)²\nV′ = (${a} − 2x)(${a} − 6x) = 0  ⇒  x = ${a/2} or x = ${ans}\nx = ${a/2} gives V = 0, so x = ${ans} cm (V″ < 0 there).`, ta:`V = x(${a} − 2x)²\nV′ = (${a} − 2x)(${a} − 6x) = 0  ⇒  x = ${a/2} அல்லது ${ans}\nx = ${a/2}-இல் V = 0; எனவே x = ${ans} cm.`}}; },
+    () => { const p = pick([0.5,1,2]), v = ri(3,6); const q = 2*p*v*v*v; return {
+      q:{en:`Running cost of a conveyor is C(v) = ${p}v² + ${q}/v rupees per hour at speed v m/s. Find the speed v (m/s) that minimises cost.`, ta:`v m/s வேகத்தில் ஒரு கடத்தியின் இயக்கச் செலவு C(v) = ${p}v² + ${q}/v ரூபாய்/மணி. செலவைச் சிறுமமாக்கும் வேகம் v (m/s) காண்க.`},
+      ans:v, unit:'m/s', mis:'M_SECOND_DERIV_SIGN',
+      sol:{en:`C′(v) = ${2*p}v − ${q}/v² = 0  ⇒  v³ = ${q/(2*p)}  ⇒  v = ${v} m/s\nC″(v) = ${2*p} + ${2*q}/v³ > 0, so it is a minimum.`, ta:`C′(v) = ${2*p}v − ${q}/v² = 0  ⇒  v³ = ${q/(2*p)}  ⇒  v = ${v} m/s\nC″(v) > 0; எனவே சிறுமம்.`}}; }
+  ],
+  lintrans:[
+    () => { const s1 = ri(2,4), s2 = ri(2,3), W = ri(2,6), H = ri(1,5); const ans = s1*s2*W*H; return {
+      q:{en:`A CAD tool scales a ${W} cm × ${H} cm plate with A = [[${s1}, 0], [0, ${s2}]]. What is the new area (cm²)?`, ta:`ஒரு CAD கருவி ${W} cm × ${H} cm தகட்டை A = [[${s1}, 0], [0, ${s2}]] மூலம் அளவு மாற்றுகிறது. புதிய பரப்பளவு (cm²) என்ன?`},
+      ans, unit:'cm²', mis:'M_DET_DIAG',
+      sol:{en:`Area scales by |det A| = ${s1}×${s2} = ${s1*s2}\nNew area = ${s1*s2} × ${W*H} = ${ans} cm²`, ta:`பரப்பளவு |det A| = ${s1*s2} மடங்கு\nபுதிய பரப்பளவு = ${s1*s2} × ${W*H} = ${ans} cm²`}}; },
+    () => { let a,b,c,d,det; do { a = ri(-3,4); b = ri(-3,3); c = ri(-3,3); d = ri(-3,4); det = a*d - b*c; } while (det === 0 || Math.abs(det) > 12); const W = ri(1,4), H = ri(1,3); const ans = Math.abs(det)*W*H; return {
+      q:{en:`A ${W} × ${H} m panel is mapped by A = [[${a}, ${b}], [${c}, ${d}]]. Find the area (m²) of its image.`, ta:`${W} × ${H} m பலகை A = [[${a}, ${b}], [${c}, ${d}]] மூலம் உருமாற்றப்படுகிறது. அதன் பிம்பத்தின் பரப்பளவு (m²) காண்க.`},
+      ans, unit:'m²', mis:'M_DET_SIGN',
+      sol:{en:`det A = (${a})(${d}) − (${b})(${c}) = ${det}\nArea = |det A| × ${W*H} = ${ans} m²`, ta:`det A = (${a})(${d}) − (${b})(${c}) = ${det}\nபரப்பளவு = |det A| × ${W*H} = ${ans} m²`}}; },
+    () => { const r1 = ri(2,5), r2_ = -ri(1,3); const s = r1 + r2_, pq = -r1*r2_; const p = pick([1,2,3].filter(x => pq % x === 0)), q = pq / p; return {
+      q:{en:`A stiffness matrix depends on a design parameter k: A = [[k, ${p}], [${q}, k ${s >= 0 ? '−' : '+'} ${Math.abs(s)}]]. For which positive k does A have no inverse?`, ta:`ஒரு வடிவமைப்பு அளவுரு k-ஐப் பொறுத்த அணி A = [[k, ${p}], [${q}, k ${s >= 0 ? '−' : '+'} ${Math.abs(s)}]]. எந்த நேர் k-க்கு A-க்கு நேர்மாறு இல்லை?`},
+      ans:r1, unit:'', mis:'M_DET_SIGN',
+      sol:{en:`det A = k(k ${s >= 0 ? '−' : '+'} ${Math.abs(s)}) − ${pq} = k² ${s >= 0 ? '−' : '+'} ${Math.abs(s)}k − ${pq} = (k − ${r1})(k + ${-r2_}) = 0\nPositive root: k = ${r1}`, ta:`det A = k² ${s >= 0 ? '−' : '+'} ${Math.abs(s)}k − ${pq} = (k − ${r1})(k + ${-r2_}) = 0\nநேர் மூலம்: k = ${r1}`}}; }
+  ],
+  eigen:[
+    () => { const a = ri(1,7), d = ri(1,7), b = ri(1,5); const ans = Math.max(a,d); return {
+      q:{en:`A = [[${a}, ${b}], [0, ${d}]] (an upper triangular matrix). What is its largest eigenvalue?`, ta:`A = [[${a}, ${b}], [0, ${d}]] (மேல் முக்கோண அணி). அதன் பெரிய ஐகன் மதிப்பு என்ன?`},
+      ans, unit:'', mis:'M_CHAR_EQ_SIGN',
+      sol:{en:`det(A − λI) = (${a} − λ)(${d} − λ) = 0  ⇒  λ = ${a}, ${d}\nFor triangular matrices the diagonal entries are the eigenvalues. Largest = ${ans}`, ta:`det(A − λI) = (${a} − λ)(${d} − λ) = 0  ⇒  λ = ${a}, ${d}\nபெரியது = ${ans}`}}; },
+    () => { const a = ri(2,6), b = ri(1,4) * pick([1,-1]); const ans = a + Math.abs(b); return {
+      q:{en:`The stress tensor in a plate is S = [[${a}, ${b}], [${b}, ${a}]] MPa. Find the largest principal stress (its largest eigenvalue).`, ta:`ஒரு தகட்டில் அழுத்த டென்சர் S = [[${a}, ${b}], [${b}, ${a}]] MPa. பெரும முதன்மை அழுத்தம் (பெரிய ஐகன் மதிப்பு) காண்க.`},
+      ans, unit:'MPa', mis:'M_EIGEN_DIAG',
+      sol:{en:`(${a} − λ)² − ${b*b} = 0  ⇒  λ = ${a} ± ${Math.abs(b)} = ${a+Math.abs(b)}, ${a-Math.abs(b)}\nLargest principal stress = ${ans} MPa`, ta:`(${a} − λ)² − ${b*b} = 0  ⇒  λ = ${a} ± ${Math.abs(b)}\nபெரும முதன்மை அழுத்தம் = ${ans} MPa`}}; },
+    () => { const m = pick([1,2,5]), w = pick([2,3,4,5,10]); const k = m*w*w; return {
+      q:{en:`Two equal masses m = ${m} kg are joined by three springs of stiffness k = ${k} N/m, giving K = [[2k, −k], [−k, 2k]]. The natural frequencies satisfy ω² = λ/m for each eigenvalue λ of K. Find the lowest natural frequency ω (rad/s).`, ta:`m = ${m} kg நிறையுள்ள இரண்டு நிறைகள் k = ${k} N/m விறைப்புள்ள மூன்று சுருள்வில்களால் இணைக்கப்பட்டுள்ளன: K = [[2k, −k], [−k, 2k]]. ஒவ்வொரு ஐகன் மதிப்பு λ-க்கும் ω² = λ/m. குறைந்த இயல் அதிர்வெண் ω (rad/s) காண்க.`},
+      ans:w, unit:'rad/s', mis:'M_EIGEN_DIAG',
+      sol:{en:`Eigenvalues of K: (2k − λ)² − k² = 0  ⇒  λ = k, 3k\nLowest: ω² = k/m = ${k}/${m} = ${w*w}  ⇒  ω = ${w} rad/s`, ta:`K-இன் ஐகன் மதிப்புகள்: λ = k, 3k\nகுறைந்தது: ω² = k/m = ${w*w}  ⇒  ω = ${w} rad/s`}}; }
+  ]
+};
+
+/* ---------- Seeded random ---------- */
+function rng(seed){ let s = (seed >>> 0) || 0x9e3779b9; return () => { s ^= s << 13; s >>>= 0; s ^= s >>> 17; s ^= s << 5; s >>>= 0; return s / 4294967296; }; }
+function gauss(R){ const u = Math.max(R(), 1e-9), v = R(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
+
+/* ---------- Question paper assembly: Jumping Particle Swarm Optimisation ----------
+   Pattern: Part A 10 × 2 marks (2 per CO); Part B 5 × 16 marks, internal choice (a)/(b), same CO.
+   A particle chooses one question per slot. Each iteration every slot "jumps" to the particle's own best,
+   the swarm's best, or a random candidate (JPSO), followed by a one-flip local search on the global best. */
+function buildSlots(course, pat){
+  pat = pat || {aCount:10, bCount:5};
+  const ids = course.cos.map(c => c.id);
+  const isA = q => q.m === 2, isB = q => q.m !== 2;
+  const cosA = ids.filter(co => course.bank.some(q => q.co === co && isA(q)));
+  const cosB = ids.filter(co => course.bank.some(q => q.co === co && isB(q)));
+  const A = [], B = [];
+  // round-robin over COs, never giving a CO more slots than it has distinct questions
+  const capA = Object.fromEntries(cosA.map(co => [co, course.bank.filter(q => q.co === co && isA(q)).length]));
+  const capB = Object.fromEntries(cosB.map(co => [co, Math.floor(course.bank.filter(q => q.co === co && isB(q)).length / 2)]));
+  const useA = {}, useB = {};
+  if (cosA.length) for (let i = 0, k = 0; A.length < pat.aCount && k < pat.aCount * Math.max(1, cosA.length) * 2; k++){
+    const co = cosA[k % cosA.length]; if ((useA[co] || 0) >= capA[co]) { if (cosA.every(c => (useA[c] || 0) >= capA[c])) break; continue; }
+    useA[co] = (useA[co] || 0) + 1; A.push({part:'A', co, cands: course.bank.filter(q => q.co === co && isA(q))});
+  }
+  if (cosB.length) for (let j = 0, k = 0; j < pat.bCount && k < pat.bCount * Math.max(1, cosB.length) * 2; k++){
+    const co = cosB[k % cosB.length]; if ((useB[co] || 0) >= capB[co]) { if (cosB.every(c => (useB[c] || 0) >= capB[c])) break; continue; }
+    useB[co] = (useB[co] || 0) + 1; const cands = course.bank.filter(q => q.co === co && isB(q));
+    B.push({part:'B', co, cands, opt:'a', pair:j}, {part:'B', co, cands, opt:'b', pair:j}); j++;
+  }
+  A.sort((x, y) => ids.indexOf(x.co) - ids.indexOf(y.co));
+  B.sort((x, y) => ids.indexOf(x.co) - ids.indexOf(y.co) || x.pair - y.pair || (x.opt < y.opt ? -1 : 1));
+  // renumber pairs after sorting so Part B questions run in CO order
+  let k = -1, last = null; for (const s of B){ if (s.pair !== last){ last = s.pair; k++; } s.pno = k; }
+  B.forEach(s => s.pair = s.pno);
+  return A.concat(B);
+}
+function paperStats(qs, bMarks = 16){
+  // weights: Part A question = 2 marks; a Part B option = half its marks, as either (a) or (b) is answered
+  let low = 0, mid = 0, high = 0, tot = 0, dB = 0, nB = 0;
+  for (const q of qs){ if (!q) continue; const w = q.m === 2 ? 2 : bMarks / 2; tot += w; if (q.k <= 2) low += w; else if (q.k === 3) mid += w; else high += w; if (q.m !== 2){ dB += q.d; nB++; } }
+  if (!tot) return {low:0, mid:0, high:0, diffB:0};
+  return {low: 100*low/tot, mid: 100*mid/tot, high: 100*high/tot, diffB: nB ? dB/nB : 0};
+}
+function paperCost(qs, slots, cfg){
+  let pen = 0;
+  const ids = qs.filter(Boolean).map(q => q.id);
+  pen += 1000 * (ids.length - new Set(ids).size);
+  for (let i = 0; i < slots.length; i++) if (!qs[i] || qs[i].co !== slots[i].co) pen += 1000;
+  const st = paperStats(qs, cfg.bMarks || 16);
+  pen += 3 * Math.max(0, st.low - cfg.lowMax);
+  pen += 3 * Math.max(0, cfg.highMin - st.high);
+  pen += 1 * Math.max(0, cfg.midMin - st.mid);
+  pen += 25 * Math.abs(st.diffB - cfg.diffTarget);
+  for (let i = 0; i < slots.length; i++) if (slots[i].opt === 'a'){ const a = qs[i], b = qs[i+1]; if (a && b) pen += 6 * Math.abs(a.d - b.d) + 2 * Math.abs(a.k - b.k); }
+  if (cfg.avoid && cfg.prev) pen += 12 * ids.filter(id => cfg.prev.includes(id)).length;
+  return pen;
+}
+function jpsoPaper(course, cfg){
+  const R = rng(cfg.seed);
+  const bMarks = cfg.bMarks || 16;
+  const slots = buildSlots(course, {aCount:10, bCount:5});
+  if (!slots.length) return {slots, qs:[], cost:0, hist:[0, 0], stats:paperStats([], bMarks), bMarks, empty:true};
+  const N = 24, ITER = 70;
+  const decode = pos => pos.map((c, i) => slots[i].cands[c]);
+  const cost = pos => paperCost(decode(pos), slots, cfg);
+  const rand = () => slots.map(s => Math.floor(R() * Math.max(1, s.cands.length)));
+  let parts = Array.from({length:N}, () => { const x = rand(); return {x, c: cost(x), bx: x.slice(), bc: 0}; });
+  parts.forEach(p => p.bc = p.c);
+  let g = parts.reduce((a, b) => a.c <= b.c ? a : b); let gx = g.x.slice(), gc = g.c;
+  const hist = [gc];
+  for (let it = 0; it < ITER; it++){
+    for (const p of parts){
+      for (let s = 0; s < slots.length; s++){
+        const r = R();
+        if (r < 0.12) p.x[s] = Math.floor(R() * Math.max(1, slots[s].cands.length));
+        else if (r < 0.40) p.x[s] = p.bx[s];
+        else if (r < 0.75) p.x[s] = gx[s];
+      }
+      p.c = cost(p.x);
+      if (p.c < p.bc){ p.bc = p.c; p.bx = p.x.slice(); }
+      if (p.c < gc){ gc = p.c; gx = p.x.slice(); }
+    }
+    // local search: best single-slot change on the global best
+    let improved = true;
+    while (improved){
+      improved = false;
+      for (let s = 0; s < slots.length; s++){
+        for (let c = 0; c < slots[s].cands.length; c++){
+          if (c === gx[s]) continue; const y = gx.slice(); y[s] = c; const yc = cost(y);
+          if (yc < gc - 1e-9){ gc = yc; gx = y; improved = true; }
+        }
+      }
+    }
+    hist.push(gc);
+  }
+  const qs = decode(gx);
+  return {slots, qs, cost: gc, hist, stats: paperStats(qs, bMarks), bMarks};
+}
+
+/* ---------- Marks, CO and PO attainment ---------- */
+// paper -> question numbers: Part A Q1..Qn (2 marks each), then Part B pairs (either a or b)
+function paperQuestions(paper){
+  const out = [];
+  const A = paper.slots.map((s, i) => [s, paper.qs[i]]).filter(([s]) => s.part === 'A');
+  A.forEach(([s, q], i) => out.push({no:'Q' + (i+1), co:s.co, max:2, items:[q]}));
+  const pairs = [...new Set(paper.slots.filter(s => s.part === 'B').map(s => s.pair))];
+  pairs.forEach((pr, j) => {
+    const ia = paper.slots.findIndex(s => s.part === 'B' && s.pair === pr && s.opt === 'a');
+    const ib = paper.slots.findIndex(s => s.part === 'B' && s.pair === pr && s.opt === 'b');
+    out.push({no:'Q' + (A.length + 1 + j), co:paper.slots[ia].co, max:paper.bMarks || 16, items:[paper.qs[ia], paper.qs[ib]]});
+  });
+  return out;
+}
+function sampleMarks(paper, n = 60, seed = 7){
+  const R = rng(seed); const qs = paperQuestions(paper);
+  const weak = {CO1:0, CO2:0.25, CO3:-0.1, CO4:0.75, CO5:0.1};
+  const rows = [];
+  for (let s = 0; s < n; s++){
+    const th = gauss(R); const row = {roll: '23ME' + String(101 + s)};
+    for (const q of qs){
+      const item = q.items.length > 1 ? (R() < 0.5 ? q.items[0] : q.items[1]) : q.items[0];
+      const z = 1.25 * th + 0.9 - 0.6 * ((item ? item.d : 2) - 2) - (weak[q.co] || 0) + 0.35 * gauss(R);
+      const p = 1 / (1 + Math.exp(-z));
+      row[q.no] = Math.max(0, Math.min(q.max, Math.round(q.max * p)));
+    }
+    rows.push(row);
+  }
+  return rows;
+}
+function parseMarksCSV(text, qnos){
+  const lines = String(text).replace(/\r/g,'').split('\n').filter(l => l.trim());
+  if (lines.length < 2) throw new Error('The file needs a header row and at least one student row.');
+  const head = lines[0].split(',').map(h => h.trim().toUpperCase());
+  const missing = qnos.filter(q => !head.includes(q.toUpperCase()));
+  if (missing.length) throw new Error('Missing columns: ' + missing.join(', ') + '. Download the template for the expected layout.');
+  return lines.slice(1).map((l, r) => {
+    const cells = l.split(',').map(c => c.trim()); const row = {roll: cells[0] || ('Row ' + (r+2))};
+    qnos.forEach(q => { const v = parseFloat(cells[head.indexOf(q.toUpperCase())]); row[q] = isFinite(v) ? v : 0; });
+    return row;
+  });
+}
+function attainment(paper, rows, course, cfg){
+  const qs = paperQuestions(paper);
+  const coIds = course.cos.map(c => c.id);
+  const co = {};
+  for (const id of coIds){
+    const mine = qs.filter(q => q.co === id); const max = mine.reduce((a, q) => a + q.max, 0);
+    if (!max){ co[id] = null; continue; }
+    const pass = rows.filter(r => mine.reduce((a, q) => a + (r[q.no] || 0), 0) >= cfg.threshold / 100 * max).length;
+    const pct = rows.length ? 100 * pass / rows.length : 0;
+    const level = pct >= cfg.l3 ? 3 : pct >= cfg.l2 ? 2 : pct >= cfg.l1 ? 1 : 0;
+    const indirect = cfg.indirect[id] != null ? cfg.indirect[id] : 2.5;
+    const final = (cfg.wDirect / 100) * level + (1 - cfg.wDirect / 100) * indirect;
+    co[id] = {max, pass, pct, level, indirect, final};
+  }
+  const po = {};
+  for (const [p] of (course.pos || POS)){
+    let num = 0, den = 0;
+    for (const id of coIds){ const w = (course.map[id] || {})[p] || 0; if (w && co[id]){ num += w * co[id].final; den += w; } }
+    po[p] = den ? num / den : null;
+  }
+  return {co, po, n: rows.length};
+}
+
+/* ---------- Sample misconception data for the college heatmap ---------- */
+function sampleHeat(){
+  const ids = ['M_PRODUCT','M_SIGN_TRIG','M_LIMIT_SUB','M_VALUE_SLOPE','M_CRIT_ALWAYS_EXT','M_SECOND_DERIV_SIGN','M_FACTOR','M_ROW_COL','M_DET_SIGN','M_DET_ZERO_MATRIX','M_EIGEN_DIAG','M_CHAR_EQ_SIGN'];
+  const bias = {'I-A (Mech)':{M_PRODUCT:18, M_SECOND_DERIV_SIGN:10}, 'I-B (Civil)':{M_FACTOR:16, M_DET_SIGN:12}, 'I-C (ECE)':{M_SIGN_TRIG:20, M_LIMIT_SUB:8}, 'I-D (CSE)':{M_ROW_COL:15, M_CHAR_EQ_SIGN:9}};
+  const base = {M_EIGEN_DIAG:24, M_CRIT_ALWAYS_EXT:17, M_PRODUCT:14, M_VALUE_SLOPE:9};
+  const R = rng(4242); const data = {};
+  for (const s of SECTIONS){ data[s] = {}; for (const id of ids) data[s][id] = Math.round(4 + R() * 9 + (base[id] || 0) + ((bias[s] || {})[id] || 0)); }
+  return {ids, data, n:{'I-A (Mech)':62,'I-B (Civil)':58,'I-C (ECE)':64,'I-D (CSE)':60}};
+}
+
+/* ---------- Offline syllabus reader (fallback when AI is not available) ---------- */
+function romanToInt(s){ if (/^\d+$/.test(s)) return +s; const v = {I:1, V:5, X:10}; let t = 0; for (let i = 0; i < s.length; i++){ const a = v[s[i]] || 0, b = v[s[i+1]] || 0; t += a < b ? -a : a; } return t; }
+function parseSyllabusText(text, poText){
+  const clean = t => String(t || '').replace(/\r/g, '').split('\n').map(l => l.replace(/[ \t ]+/g, ' ').trim()).filter(Boolean);
+  const lines = clean(text), plines = clean(poText);
+  const all = lines.join('\n');
+  const codeM = all.match(/\b([A-Z]{2,5}[ -]?\d{3,5}[A-Z]?)\b/);
+  const code = codeM ? codeM[1].replace(/[ -]/g, '') : 'NEW101';
+  let name = '';
+  const nm = all.match(/course\s*(?:title|name)\s*[:\-–]\s*(.+)/i);
+  if (nm) name = nm[1].trim();
+  else if (codeM){ const ln = lines.find(l => l.includes(codeM[1])) || ''; name = ln.replace(codeM[1], '').replace(/\bL\s*T\s*P\s*C?\b.*$/i, '').replace(/\b[LTPC]\s*[:=]?\s*\d[\s\d LTPC:=-]*$/i, '').replace(/^[\s:–—-]+|[\s:–—-]+$/g, '').trim(); }
+  if (!name || name.length < 4 || name.length > 90) name = 'Imported course';
+  const units = []; let cur = null;
+  for (const l of lines){
+    const u = l.match(/^(?:UNIT|Unit|MODULE|Module)\s*[-–:]?\s*([IVX]+|\d+)\b\s*[:.\-–—]*\s*(.*)$/);
+    if (u){ cur = {no: romanToInt(u[1]), title: u[2].replace(/\(?\s*\d+\s*(hours|hrs|periods|L)\b.*$/i, '').replace(/[\s:–—-]+$/, '').trim(), topics: ''}; units.push(cur); continue; }
+    if (/^(course outcomes?|text ?books?|references?|reference books|total\b|outcomes?|co[- ]?po)/i.test(l)) cur = null;
+    if (cur && cur.topics.length < 500) cur.topics += (cur.topics ? ' ' : '') + l;
+  }
+  units.forEach(u => { if (!u.title) u.title = u.topics.split(/[.,;:–-]/)[0].slice(0, 60).trim() || ('Unit ' + u.no); });
+  const cos = [], seen = new Set();
+  for (const l of lines){ const c = l.match(/\bCO\s*-?\s*(\d{1,2})\s*[:.)\-–—]*\s*([A-Za-z].{10,})$/); if (c && !seen.has(c[1])){ seen.add(c[1]); cos.push({id: 'CO' + c[1], text: c[2].trim().slice(0, 240)}); } }
+  if (!cos.length) units.forEach((u, i) => cos.push({id: 'CO' + (i + 1), text: 'Apply the concepts of ' + u.title + ' to solve engineering problems.'}));
+  cos.forEach((c, i) => c.unit = i + 1);
+  const pos = [], sp = new Set();
+  for (const l of plines.concat(lines)){ const p = l.match(/\b(PO|PSO)\s*-?\s*(\d{1,2})\s*[:.)\-–—]*\s*([A-Za-z][^:.]{2,70})/); if (p && !sp.has(p[1] + p[2])){ sp.add(p[1] + p[2]); pos.push([p[1] + p[2], p[3].trim()]); } }
+  const found = Object.fromEntries(pos);
+  const psos = pos.filter(p => p[0].startsWith('PSO')).sort((a, b) => parseInt(a[0].slice(3)) - parseInt(b[0].slice(3)));
+  const posFinal = pos.length ? POS.map(([id, n]) => [id, found[id] || n]).concat(psos) : null;
+  const order = (posFinal || POS).map(p => p[0]);
+  const map = {}; let mapSrc = 'none';
+  for (const l of lines.concat(plines)){
+    const m = l.match(/^CO\s*-?\s*(\d{1,2})\s+((?:(?:[0-3]|-|–)\s*){6,})$/);
+    if (m){ const vals = m[2].trim().split(/\s+/); const row = {}; vals.forEach((v, i) => { const n = parseInt(v); if (n > 0 && order[i]) row[order[i]] = n; }); map['CO' + m[1]] = row; mapSrc = 'document'; }
+  }
+  return {code, name, units, cos, pos: posFinal, map, mapSrc};
+}
+
+if (typeof module !== 'undefined') module.exports = {parseExpr, tryParse, sameFn, proportional, localCheck, jpsoPaper, paperQuestions, sampleMarks, attainment, parseMarksCSV, GEN, numsIn, sampleHeat};
+
+</script>
+<script>
+/* ---------- GanitaDrishti: interface ---------- */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const store = {
+  get(k, d){ try { const v = localStorage.getItem('gd:' + k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+  set(k, v){ try { localStorage.setItem('gd:' + k, JSON.stringify(v)); } catch (e) {} }
+};
+const clone = o => JSON.parse(JSON.stringify(o));
+
+const state = {
+  role: store.get('role', 'student'),
+  lang: store.get('lang', 'en'),
+  concept: store.get('concept', 'derivative'),
+  step: 'see',
+  progress: store.get('progress', {}),
+  log: store.get('log', []),
+  drafts: store.get('drafts', {}),
+  chat: {}, apply: {}, checkRes: {}, showSol: {},
+  ctab: store.get('ctab', 'qp'),
+  courses: (() => { let cs = store.get('courses', null); if (!cs){ const old = store.get('course', null); cs = [old || clone(DEFAULT_COURSE)]; } cs.forEach(c => { if (c.code === 'MA101' && !c.src) c.sample = true; }); return cs; })(),
+  ci: store.get('ci', 0),
+  imp: {status:'idle'},
+  qpCfg: Object.assign({seed:2026, lowMax:30, highMin:20, midMin:35, diffTarget:2.2, avoid:true, bMarks:16}, store.get('qpCfg', {})),
+  paper: null, prevIds: [], tamil: null, showTa: false,
+  marks: {source:'sample', rows:null, name:''},
+  attCfg: Object.assign({threshold:60, l3:70, l2:60, l1:50, wDirect:80, target:2, indirect:{}}, store.get('attCfg', {})),
+  heatSel: null, courseDirty: true
+};
+if (!(state.ci < state.courses.length)) state.ci = 0;
+Object.defineProperty(state, 'course', {get(){ return state.courses[state.ci]; }, set(v){ state.courses[state.ci] = v; }});
+const cPOS = () => state.course.pos || POS;
+const AI = {sample:null, images:false, imgTypes:[], downloads:null, ready:false, status:'pending', perms:null};
+const CLAUDE_URL = 'https://claude.ai/artifact/GrASqE2SkWtBHQQhV73JhH';
+const CBY = Object.fromEntries(CONCEPTS.map(c => [c.id, c]));
+
+/* language helpers */
+function Lh(o){ if (o == null) return ''; if (typeof o === 'string') return esc(o);
+  if (state.lang === 'en') return esc(o.en);
+  if (state.lang === 'ta') return `<span lang="ta">${esc(o.ta || o.en)}</span>`;
+  return `<span lang="ta">${esc(o.ta || o.en)}</span><span class="sub-en">${esc(o.en)}</span>`; }
+function Lb(o){ if (typeof o === 'string') return esc(o); if (state.lang === 'en') return esc(o.en); if (state.lang === 'ta') return `<span lang="ta">${esc(o.ta)}</span>`; return `<span lang="ta">${esc(o.ta)}</span> · ${esc(o.en)}`; }
+function Lt(o){ return typeof o === 'string' ? o : (state.lang === 'en' ? o.en : (o.ta || o.en)); }
+function Lpre(o){ if (state.lang === 'both') return `<span lang="ta">${esc(o.ta)}</span>\n\n${esc(o.en)}`; return state.lang === 'ta' ? `<span lang="ta">${esc(o.ta)}</span>` : esc(o.en); }
+const langName = () => state.lang === 'en' ? 'English' : state.lang === 'ta' ? 'Tamil (Tamil script)' : 'Tamil (Tamil script) followed by the same text in English';
+
+function toast(msg){ const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 2600); }
+function save(){ store.set('progress', state.progress); store.set('log', state.log); store.set('drafts', state.drafts); }
+function prog(cid){ return state.progress[cid] || (state.progress[cid] = {ask:{}, check:false, applyOk:0, level:1, streak:0}); }
+function mastery(cid){
+  const c = CBY[cid], p = prog(cid);
+  const askN = c.ask.length, askOk = Object.values(p.ask).filter(a => a.first).length;
+  return Math.round(30 * askOk / askN + (p.check ? 30 : 0) + 10 * Math.min(4, p.applyOk || 0));
+}
+function logMis(id, src){ if (!id || !MIS[id]) return; state.log.push({id, c: state.concept, src, at: Date.now()}); if (state.log.length > 300) state.log.shift(); save(); if (state.role === 'student') renderRail(); }
+
+/* ---------- header ---------- */
+function renderHeader(){
+  $('#tagline').innerHTML = Lb(UI.tagline);
+  $('#roleStudent').innerHTML = Lb(UI.student); $('#roleCollege').innerHTML = Lb(UI.college);
+  $('#roleStudent').setAttribute('aria-pressed', state.role === 'student');
+  $('#roleCollege').setAttribute('aria-pressed', state.role === 'college');
+  $('#lang').value = state.lang;
+  const note = $('#aiNote');
+  renderAINote(note);
+}
+function aiMsg(){
+  const en = state.lang !== 'ta';
+  const T = (e, t) => state.lang === 'both' ? `${t} · ${e}` : (en ? e : t);
+  if (AI.status === 'nohost') return {txt:T('AI features run inside Claude. This copy is open outside Claude, so only the offline tools work here.', 'AI வசதிகள் Claude-க்குள் மட்டுமே இயங்கும். இந்தப் பிரதி Claude-க்கு வெளியே திறக்கப்பட்டுள்ளது.'), btn:T('Open with AI in Claude', 'Claude-இல் AI உடன் திற'), act:'open'};
+  if (AI.status === 'denied') return {txt:T('AI is switched off for this page. Allow Claude for this artifact to use AI diagnosis, the tutor and question drafting.', 'இந்தப் பக்கத்திற்கு AI அணைக்கப்பட்டுள்ளது. AI பயன்படுத்த அனுமதி வழங்குங்கள்.'), btn:T('Allow AI', 'AI-ஐ அனுமதி'), act:'manage'};
+  if (AI.status === 'off') return {txt:T('AI is not available in this view. Sign in to Claude and open the prototype from Claude, then reload.', 'இந்தக் காட்சியில் AI கிடைக்கவில்லை. Claude-இல் உள்நுழைந்து மீண்டும் திறக்கவும்.'), btn:T('Open in Claude', 'Claude-இல் திற'), act:'open'};
+  return null;
+}
+function renderAINote(note){
+  note = note || $('#aiNote'); const m = AI.ready ? aiMsg() : null;
+  if (!m){ note.hidden = true; note.innerHTML = ''; return; }
+  note.hidden = false;
+  note.innerHTML = `${esc(m.txt)} <button type="button" class="btn small ai" id="aiFix" style="margin-left:8px">${esc(m.btn)}</button>${m.act === 'manage' ? '' : ' <span class="note">The offline checker, optimiser and attainment still work.</span>'}`;
+  $('#aiFix').onclick = async () => {
+    if (m.act === 'open'){ try { window.open(CLAUDE_URL, '_blank', 'noopener'); } catch (e) { location.href = CLAUDE_URL; } return; }
+    try { if (AI.perms) await AI.perms.manage(); } catch (e) { toast('Open the artifact menu → Permissions and allow Claude.'); return; }
+    await detectAI(true);
+  };
+}
+function needAI(){ const m = aiMsg(); const note = $('#aiNote'); renderAINote(note); if (note) { note.scrollIntoView({block:'nearest'}); note.animate && note.animate([{outline:'3px solid var(--vec)'},{outline:'0 solid transparent'}], {duration:1200}); } if (m) toast(m.txt); }
+$('#roleStudent').onclick = () => { state.role = 'student'; store.set('role', 'student'); renderAll(); };
+$('#roleCollege').onclick = () => { state.role = 'college'; store.set('role', 'college'); renderAll(); };
+$('#lang').onchange = e => { state.lang = e.target.value; store.set('lang', state.lang); renderAll(); };
+
+function renderAll(){ renderHeader(); if (state.role === 'student') renderStudent(); else renderCollege(); }
+
+/* ================= STUDENT ================= */
+function renderStudent(){
+  $('#app').innerHTML = `<div class="shell"><nav class="rail railC" id="rail" aria-label="Concepts"></nav><section id="main" style="min-width:0"></section><aside class="rail railX" id="railX"></aside></div>`;
+  renderRail(); renderMain();
+}
+function renderRail(){
+  const rail = $('#rail'); if (!rail) return;
+  let h = `<div class="lib"><h4>${Lb(UI.library)}</h4><div class="libnow"><span class="chip">${Lb(UI.libNow)}</span><b>${Lh({en:'Engineering Mathematics I', ta:'பொறியியல் கணிதம் I'})}</b><span class="note">${Lb(UI.units)}</span></div><details class="libnext"><summary class="note">${Lb(UI.libNext)} (${LIBRARY.length})</summary><ul>${LIBRARY.map(x => `<li>${Lh(x)}</li>`).join('')}</ul></details></div>`;
+  for (const u of Object.keys(UNITS)){
+    h += `<div><h4>${Lb(UNITS[u])}</h4><div class="clist">`;
+    for (const c of CONCEPTS.filter(c => c.unit === u)){
+      const m = mastery(c.id);
+      h += `<button class="cbtn" data-c="${c.id}" aria-current="${c.id === state.concept}"><span class="nm">${Lh(c.name)}</span><span class="pct">${Lb(UI.mastery)} ${m}% · ${c.co}</span><div class="meter"><i style="width:${m}%"></i></div></button>`;
+    }
+    h += `</div></div>`;
+  }
+  const counts = {}; for (const l of state.log) counts[l.id] = (counts[l.id] || 0) + 1;
+  const top = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 6);
+  rail.innerHTML = h; h = '';
+  h += `<div><h4>${Lb(UI.myMis)}</h4>`;
+  h += top.length ? `<ul class="mislist">${top.map(([id, n]) => `<li><span class="n">×${n}</span><span>${Lh(MIS[id])}</span></li>`).join('')}</ul>` : `<p class="note">${Lh(UI.none)}</p>`;
+  h += `</div><div id="resetBox"><button class="linkbtn" id="resetBtn">${Lb(UI.reset)}</button></div>`;
+  $('#railX').innerHTML = h;
+  $$('.cbtn', rail).forEach(b => b.onclick = () => { state.concept = b.dataset.c; store.set('concept', state.concept); state.step = 'see'; renderRail(); renderMain(); });
+  $('#resetBtn').onclick = () => {
+    $('#resetBox').innerHTML = `<span class="note">${Lb(UI.resetConfirm)}</span> <button class="btn small" id="rYes">${Lb(UI.yes)}</button> <button class="btn small" id="rNo">${Lb(UI.no)}</button>`;
+    $('#rYes').onclick = () => { state.progress = {}; state.log = []; state.drafts = {}; state.checkRes = {}; save(); renderStudent(); };
+    $('#rNo').onclick = renderRail;
+  };
+}
+function renderMain(){
+  const c = CBY[state.concept], main = $('#main');
+  const steps = ['see', 'ask', 'check', 'apply'];
+  main.innerHTML = `
+    <div class="chead"><div class="eyebrow">${Lb(UNITS[c.unit])}</div><h2>${Lh(c.name)}</h2><span class="chip">${c.co}</span></div>
+    <div class="steps" role="tablist">${steps.map((s, i) => `<button role="tab" data-s="${s}" aria-selected="${state.step === s}"><span class="no">${i + 1}</span><span class="lbl">${Lh(UI[s])}</span></button>`).join('')}</div>
+    <div id="panel"></div>`;
+  $$('.steps button', main).forEach(b => b.onclick = () => { state.step = b.dataset.s; renderMain(); });
+  ({see: panelSee, ask: panelAsk, check: panelCheck, apply: panelApply})[state.step](c);
+}
+function nextBtn(to){ return `<div class="stepnav"><button class="btn primary" data-go="${to}">${Lb(UI.nextStep)}: ${Lb(UI[to])} →</button></div>`; }
+function bindNext(){ $$('[data-go]').forEach(b => b.onclick = () => { state.step = b.dataset.go; renderMain(); window.scrollTo({top:0}); }); }
+
+/* ---------- SEE: interactive visuals ---------- */
+const cssv = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+function setupCanvas(cv){
+  const dpr = window.devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight;
+  cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+  const ctx = cv.getContext('2d'); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, w, h);
+  return {ctx, w, h};
+}
+function region(base, rect, xmin, xmax, ymin, ymax, equal){
+  let sx = rect.w / (xmax - xmin), sy = rect.h / (ymax - ymin), ox = 0, oy = 0;
+  if (equal){ const s = Math.min(sx, sy); ox = (rect.w - s * (xmax - xmin)) / 2; oy = (rect.h - s * (ymax - ymin)) / 2; sx = sy = s; }
+  const X = x => rect.x + ox + (x - xmin) * sx, Y = y => rect.y + rect.h - oy - (y - ymin) * sy;
+  const x0 = xmin - ox / sx, x1 = xmax + ox / sx, y0 = ymin - oy / sy, y1 = ymax + oy / sy;
+  return {...base, rect, X, Y, xmin: x0, xmax: x1, ymin: y0, ymax: y1, sx, sy};
+}
+function clip(p){ p.ctx.save(); p.ctx.beginPath(); p.ctx.rect(p.rect.x, p.rect.y, p.rect.w, p.rect.h); p.ctx.clip(); }
+function graphPaper(p, step = 0.5, major = 1){
+  const {ctx} = p; clip(p);
+  ctx.lineWidth = 1;
+  for (let x = Math.ceil(p.xmin / step) * step; x <= p.xmax; x += step){ const isM = Math.abs(x / major - Math.round(x / major)) < 1e-6; ctx.strokeStyle = isM ? cssv('--grid2') : cssv('--grid'); ctx.beginPath(); ctx.moveTo(Math.round(p.X(x)) + .5, p.rect.y); ctx.lineTo(Math.round(p.X(x)) + .5, p.rect.y + p.rect.h); ctx.stroke(); }
+  for (let y = Math.ceil(p.ymin / step) * step; y <= p.ymax; y += step){ const isM = Math.abs(y / major - Math.round(y / major)) < 1e-6; ctx.strokeStyle = isM ? cssv('--grid2') : cssv('--grid'); ctx.beginPath(); ctx.moveTo(p.rect.x, Math.round(p.Y(y)) + .5); ctx.lineTo(p.rect.x + p.rect.w, Math.round(p.Y(y)) + .5); ctx.stroke(); }
+  ctx.strokeStyle = cssv('--muted'); ctx.lineWidth = 1.2;
+  ctx.beginPath(); ctx.moveTo(p.X(p.xmin), p.Y(0)); ctx.lineTo(p.X(p.xmax), p.Y(0)); ctx.moveTo(p.X(0), p.Y(p.ymin)); ctx.lineTo(p.X(0), p.Y(p.ymax)); ctx.stroke();
+  ctx.fillStyle = cssv('--muted'); ctx.font = '11px ' + cssv('--mono'); ctx.textAlign = 'center';
+  for (let x = Math.ceil(p.xmin); x <= Math.floor(p.xmax); x++) if (x) ctx.fillText(x, p.X(x), p.Y(0) + 13);
+  ctx.textAlign = 'right';
+  for (let y = Math.ceil(p.ymin); y <= Math.floor(p.ymax); y++) if (y && (p.ymax - p.ymin < 12 || y % 2 === 0)) ctx.fillText(y, p.X(0) - 5, p.Y(y) + 4);
+  ctx.restore();
+}
+function plotFn(p, f, color, width = 2, dash = null){
+  const {ctx} = p; clip(p); ctx.strokeStyle = color; ctx.lineWidth = width; ctx.setLineDash(dash || []); ctx.beginPath();
+  let pen = false; const n = Math.max(200, p.rect.w);
+  for (let i = 0; i <= n; i++){ const x = p.xmin + (p.xmax - p.xmin) * i / n, y = f(x); if (!isFinite(y)){ pen = false; continue; } const py = p.Y(y); if (!pen){ ctx.moveTo(p.X(x), py); pen = true; } else ctx.lineTo(p.X(x), py); }
+  ctx.stroke(); ctx.setLineDash([]); ctx.restore();
+}
+function dot(p, x, y, color, r = 5, label){
+  const {ctx} = p; ctx.fillStyle = color; ctx.beginPath(); ctx.arc(p.X(x), p.Y(y), r, 0, 7); ctx.fill();
+  if (label){ ctx.font = '600 13px ' + cssv('--mono'); ctx.fillStyle = cssv('--ink'); ctx.textAlign = 'left'; ctx.fillText(label, p.X(x) + 8, p.Y(y) - 8); }
+}
+function arrow(p, x0, y0, x1, y1, color, w = 2.5, label){
+  const {ctx} = p; const a = p.X(x0), b = p.Y(y0), c = p.X(x1), d = p.Y(y1);
+  ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = w; ctx.beginPath(); ctx.moveTo(a, b); ctx.lineTo(c, d); ctx.stroke();
+  const ang = Math.atan2(d - b, c - a), L = 11; if (Math.hypot(c - a, d - b) > 4){ ctx.beginPath(); ctx.moveTo(c, d); ctx.lineTo(c - L * Math.cos(ang - .4), d - L * Math.sin(ang - .4)); ctx.lineTo(c - L * Math.cos(ang + .4), d - L * Math.sin(ang + .4)); ctx.closePath(); ctx.fill(); }
+  if (label){ ctx.font = '600 14px ' + cssv('--mono'); ctx.textAlign = 'left'; ctx.fillText(label, c + 6, d - 6); }
+}
+const fmt = (v, d = 2) => (Math.abs(v) < 5e-10 ? 0 : v).toFixed(d).replace(/\.?0+$/, m => m.includes('.') ? '' : m) || '0';
+
+const VIS = {
+  derivative:{
+    ctrls:() => `${rng_('x0', 'x₀', -2.2, 2.2, 0.01, 1.6)}${rng_('h', 'h', 0.01, 1.5, 0.01, 1)}`,
+    draw(){
+      const cv = $('#cv'); if (!cv) return; const base = setupCanvas(cv);
+      const x0 = +$('#x0').value, h = +$('#h').value;
+      const f = x => x * x * x - 3 * x, fp = x => 3 * x * x - 3;
+      const p = region(base, {x:10, y:10, w:base.w - 20, h:base.h - 20}, -2.6, 2.6, -4.5, 4.5);
+      graphPaper(p);
+      plotFn(p, f, cssv('--ink'), 2.4);
+      const x1 = x0 + h, ms = (f(x1) - f(x0)) / h, mt = fp(x0);
+      plotFn(p, x => f(x0) + ms * (x - x0), cssv('--vec'), 2);
+      plotFn(p, x => f(x0) + mt * (x - x0), cssv('--accent'), 2.4, [7, 5]);
+      dot(p, x0, f(x0), cssv('--accent'), 6, 'P'); dot(p, x1, f(x1), cssv('--vec'), 5, 'Q');
+      $('#ro').innerHTML = `<span>f(x₀) = <b>${fmt(f(x0))}</b></span><span style="color:var(--vec)">${state.lang === 'en' ? 'secant slope' : 'வெட்டுக்கோட்டுச் சாய்வு'} = <b>${fmt(ms, 3)}</b></span><span style="color:var(--accent)">f′(x₀) = 3x₀² − 3 = <b>${fmt(mt, 3)}</b></span><span>${state.lang === 'en' ? 'gap' : 'இடைவெளி'} = <b>${fmt(Math.abs(ms - mt), 3)}</b></span>${Math.abs(ms - mt) < 0.05 ? `<span class="flag">${state.lang === 'en' ? 'secant ≈ tangent' : 'வெட்டுக்கோடு ≈ தொடுகோடு'}</span>` : ''}`;
+    }
+  },
+  extrema:{
+    ctrls:() => rng_('a', 'a', -1, 4, 0.05, 3),
+    draw(){
+      const cv = $('#cv'); if (!cv) return; const base = setupCanvas(cv);
+      const a = +$('#a').value, f = x => x * x * x - a * x, fp = x => 3 * x * x - a;
+      const H1 = Math.round((base.h - 30) * 0.6);
+      const p = region(base, {x:10, y:10, w:base.w - 20, h:H1}, -2.3, 2.3, -4.5, 4.5);
+      const q = region(base, {x:10, y:H1 + 22, w:base.w - 20, h:base.h - H1 - 32}, -2.3, 2.3, -4.5, 12);
+      graphPaper(p); graphPaper(q, 1, 2);
+      const {ctx} = base;
+      clip(q); ctx.globalAlpha = .28;
+      for (let i = 0; i < q.rect.w; i += 2){ const x = q.xmin + (q.xmax - q.xmin) * i / q.rect.w, y = fp(x); ctx.fillStyle = y >= 0 ? cssv('--good') : cssv('--bad'); const y0 = q.Y(0), y1 = q.Y(y); ctx.fillRect(q.X(x), Math.min(y0, y1), 2, Math.abs(y1 - y0)); }
+      ctx.globalAlpha = 1; ctx.restore();
+      plotFn(q, fp, cssv('--ink'), 2);
+      clip(p); ctx.lineWidth = 2.8; const n = p.rect.w;
+      for (let i = 0; i < n; i++){ const xa = p.xmin + (p.xmax - p.xmin) * i / n, xb = p.xmin + (p.xmax - p.xmin) * (i + 1) / n; ctx.strokeStyle = fp((xa + xb) / 2) >= 0 ? cssv('--good') : cssv('--bad'); ctx.beginPath(); ctx.moveTo(p.X(xa), p.Y(f(xa))); ctx.lineTo(p.X(xb), p.Y(f(xb))); ctx.stroke(); }
+      ctx.restore();
+      ctx.fillStyle = cssv('--muted'); ctx.font = '600 12px ' + cssv('--mono'); ctx.textAlign = 'left';
+      ctx.fillText('f(x) = x³ − ' + fmt(a) + 'x', 18, 26); ctx.fillText('f′(x) = 3x² − ' + fmt(a), 18, H1 + 38);
+      let ro = '';
+      const en = state.lang === 'en';
+      if (a > 0.001){
+        const c = Math.sqrt(a / 3);
+        dot(p, -c, f(-c), cssv('--ink'), 6, en ? 'max' : 'பெருமம்'); dot(p, c, f(c), cssv('--ink'), 6, en ? 'min' : 'சிறுமம்');
+        dot(q, -c, 0, cssv('--ink'), 4); dot(q, c, 0, cssv('--ink'), 4);
+        ro = `<span>${en ? 'critical points' : 'மாறுநிலைப் புள்ளிகள்'}: x = ±<b>${fmt(c, 3)}</b></span><span>f″(−${fmt(c, 2)}) = <b>${fmt(-6 * c, 2)}</b> < 0 → ${en ? 'max' : 'பெருமம்'}</span><span>f″(${fmt(c, 2)}) = <b>${fmt(6 * c, 2)}</b> > 0 → ${en ? 'min' : 'சிறுமம்'}</span>`;
+      } else if (a >= -0.001){
+        dot(p, 0, 0, cssv('--warn'), 6, en ? 'f′ = 0, no turn' : 'f′ = 0, திருப்பம் இல்லை'); dot(q, 0, 0, cssv('--warn'), 4);
+        ro = `<span class="flag" style="color:var(--warn)">${en ? 'f′(0) = 0 but f′ does not change sign: not a maximum or minimum.' : 'f′(0) = 0, ஆனால் f′ குறி மாறவில்லை: பெருமமும் இல்லை, சிறுமமும் இல்லை.'}</span>`;
+      } else ro = `<span>${en ? 'f′(x) > 0 everywhere: no critical points.' : 'எங்கும் f′(x) > 0: மாறுநிலைப் புள்ளிகள் இல்லை.'}</span>`;
+      $('#ro').innerHTML = ro;
+    }
+  },
+  lintrans:{
+    ctrls:() => `${rng_('ma', 'a', -2, 2, 0.1, 1)}${rng_('mb', 'b', -2, 2, 0.1, 1)}${rng_('mc', 'c', -2, 2, 0.1, 0)}${rng_('md', 'd', -2, 2, 0.1, 1)}`,
+    presets:[['Shear', [1,1,0,1]], ['Rotate 90°', [0,-1,1,0]], ['Reflect y = x', [0,1,1,0]], ['Stretch', [2,0,0,1.5]], ['Squash (det 0)', [1,2,0.5,1]], ['Identity', [1,0,0,1]]],
+    draw(){
+      const cv = $('#cv'); if (!cv) return; const base = setupCanvas(cv);
+      const a = +$('#ma').value, b = +$('#mb').value, c = +$('#mc').value, d = +$('#md').value;
+      const p = region(base, {x:10, y:10, w:base.w - 20, h:base.h - 20}, -3.6, 3.6, -3.6, 3.6, true);
+      graphPaper(p, 1, 1);
+      const T = (x, y) => [a * x + b * y, c * x + d * y];
+      const {ctx} = base; clip(p);
+      ctx.strokeStyle = cssv('--vec'); ctx.globalAlpha = .35; ctx.lineWidth = 1;
+      for (let k = -8; k <= 8; k++){
+        let [x1, y1] = T(k, -8), [x2, y2] = T(k, 8); ctx.beginPath(); ctx.moveTo(p.X(x1), p.Y(y1)); ctx.lineTo(p.X(x2), p.Y(y2)); ctx.stroke();
+        [x1, y1] = T(-8, k); [x2, y2] = T(8, k); ctx.beginPath(); ctx.moveTo(p.X(x1), p.Y(y1)); ctx.lineTo(p.X(x2), p.Y(y2)); ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+      const sq = [T(0, 0), T(1, 0), T(1, 1), T(0, 1)];
+      ctx.fillStyle = cssv('--accent'); ctx.globalAlpha = .2; ctx.beginPath(); sq.forEach(([x, y], i) => i ? ctx.lineTo(p.X(x), p.Y(y)) : ctx.moveTo(p.X(x), p.Y(y))); ctx.closePath(); ctx.fill();
+      ctx.globalAlpha = 1; ctx.strokeStyle = cssv('--accent'); ctx.lineWidth = 1.5; ctx.stroke();
+      ctx.restore();
+      arrow(p, 0, 0, a, c, cssv('--accent'), 3, 'î');
+      arrow(p, 0, 0, b, d, cssv('--vec'), 3, 'ĵ');
+      const det = a * d - b * c, en = state.lang === 'en';
+      $('#ro').innerHTML = `<span>A = [[${fmt(a, 1)}, ${fmt(b, 1)}], [${fmt(c, 1)}, ${fmt(d, 1)}]]</span><span style="color:var(--accent)">î → (${fmt(a, 1)}, ${fmt(c, 1)})</span><span style="color:var(--vec)">ĵ → (${fmt(b, 1)}, ${fmt(d, 1)})</span><span>det A = ad − bc = <b>${fmt(det, 2)}</b></span><span class="flag" style="color:${Math.abs(det) < 1e-9 ? 'var(--bad)' : det < 0 ? 'var(--warn)' : 'var(--good)'}">${Math.abs(det) < 1e-9 ? (en ? 'collapsed onto a line: no inverse' : 'கோட்டில் சுருங்கியது: நேர்மாறு இல்லை') : det < 0 ? (en ? 'orientation flipped' : 'திசையமைப்பு புரண்டது') : (en ? 'area × ' + fmt(det, 2) : 'பரப்பளவு × ' + fmt(det, 2))}</span>`;
+    }
+  },
+  eigen:{
+    mats:[[2,1,1,2],[3,1,0,2],[1,2,2,-2],[0,-1,1,0]],
+    ctrls:() => `<div class="ctrl"><label for="em">A</label><select id="em" class="sel" style="width:100%">${VIS.eigen.mats.map((m, i) => `<option value="${i}">[[${m[0]}, ${m[1]}], [${m[2]}, ${m[3]}]]${i === 3 ? ' (rotation)' : ''}</option>`).join('')}</select></div>${rng_('th', 'θ (°)', 0, 180, 0.5, 20)}<div class="ctrl"><label>&nbsp;</label><div class="row"><button class="btn small" id="sweep" type="button">${state.lang === 'en' ? 'Sweep θ' : 'θ-ஐச் சுழற்று'}</button><label class="row note" style="gap:6px"><input type="checkbox" id="showE"> ${state.lang === 'en' ? 'show eigen directions' : 'ஐகன் திசைகளைக் காட்டு'}</label></div></div>`,
+    draw(){
+      const cv = $('#cv'); if (!cv) return; const base = setupCanvas(cv);
+      const [a, b, c, d] = VIS.eigen.mats[+$('#em').value], th = +$('#th').value * Math.PI / 180;
+      const p = region(base, {x:10, y:10, w:base.w - 20, h:base.h - 20}, -3.8, 3.8, -3.8, 3.8, true);
+      graphPaper(p, 0.5, 1);
+      const {ctx} = base;
+      ctx.strokeStyle = cssv('--grid2'); ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(p.X(0), p.Y(0), p.sx, 0, 7); ctx.stroke();
+      clip(p); ctx.strokeStyle = cssv('--accent'); ctx.globalAlpha = .45; ctx.setLineDash([3, 4]); ctx.beginPath();
+      for (let i = 0; i <= 120; i++){ const t = i / 120 * 2 * Math.PI, x = a * Math.cos(t) + b * Math.sin(t), y = c * Math.cos(t) + d * Math.sin(t); i ? ctx.lineTo(p.X(x), p.Y(y)) : ctx.moveTo(p.X(x), p.Y(y)); }
+      ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha = 1; ctx.restore();
+      const tr = a + d, dt = a * d - b * c, disc = tr * tr - 4 * dt;
+      if ($('#showE').checked && disc >= 0){
+        for (const lam of [(tr + Math.sqrt(disc)) / 2, (tr - Math.sqrt(disc)) / 2]){
+          let v = Math.abs(b) > 1e-9 ? [b, lam - a] : Math.abs(c) > 1e-9 ? [lam - d, c] : (Math.abs(lam - a) < 1e-9 ? [1, 0] : [0, 1]);
+          const L = Math.hypot(...v); v = [v[0] / L, v[1] / L];
+          plotFn({...p, ctx}, x => Math.abs(v[0]) < 1e-9 ? NaN : v[1] / v[0] * x, cssv('--warn'), 1.5, [6, 5]);
+          if (Math.abs(v[0]) < 1e-9){ ctx.strokeStyle = cssv('--warn'); ctx.setLineDash([6, 5]); ctx.beginPath(); ctx.moveTo(p.X(0), p.Y(p.ymin)); ctx.lineTo(p.X(0), p.Y(p.ymax)); ctx.stroke(); ctx.setLineDash([]); }
+        }
+      }
+      const u = [Math.cos(th), Math.sin(th)], Au = [a * u[0] + b * u[1], c * u[0] + d * u[1]];
+      clip(p); ctx.strokeStyle = cssv('--vec'); ctx.globalAlpha = .4; ctx.setLineDash([2, 4]); ctx.beginPath(); ctx.moveTo(p.X(-4 * u[0]), p.Y(-4 * u[1])); ctx.lineTo(p.X(4 * u[0]), p.Y(4 * u[1])); ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha = 1; ctx.restore();
+      const cross = u[0] * Au[1] - u[1] * Au[0], dotp = u[0] * Au[0] + u[1] * Au[1], nA = Math.hypot(...Au);
+      const ang = Math.atan2(Math.abs(cross), dotp) * 180 / Math.PI;
+      const isE = nA > 1e-6 && (ang < 1.6 || ang > 178.4);
+      arrow(p, 0, 0, Au[0], Au[1], cssv('--accent'), isE ? 4.5 : 3, 'Au');
+      arrow(p, 0, 0, u[0], u[1], cssv('--vec'), 3, 'u');
+      const en = state.lang === 'en';
+      $('#ro').innerHTML = `<span style="color:var(--vec)">u = (${fmt(u[0], 2)}, ${fmt(u[1], 2)})</span><span style="color:var(--accent)">Au = (${fmt(Au[0], 2)}, ${fmt(Au[1], 2)})</span><span>${en ? 'angle between u and Au' : 'u, Au இடையிலான கோணம்'} = <b>${fmt(ang, 1)}°</b></span>${isE ? `<span class="flag">${en ? 'eigenvector!' : 'ஐகன் வெக்டர்!'} λ ≈ <b>${fmt(Math.sign(dotp) * nA, 2)}</b></span>` : ''}${disc < 0 ? `<span style="color:var(--warn)">${en ? 'No real eigenvectors: every direction is turned.' : 'மெய் ஐகன் வெக்டர்கள் இல்லை: எல்லாத் திசைகளும் திருப்பப்படுகின்றன.'}</span>` : ''}`;
+    }
+  }
+};
+function rng_(id, label, min, max, step, val){ return `<div class="ctrl"><label for="${id}"><span>${label}</span><output id="${id}o">${val}</output></label><input type="range" id="${id}" min="${min}" max="${max}" step="${step}" value="${val}"></div>`; }
+
+let sweepRAF = 0, ro = null;
+function panelSee(c){
+  const V = VIS[c.id];
+  $('#panel').innerHTML = `<p class="lead">${Lh(c.see)}</p>
+    <div class="stage" id="stage"><canvas id="cv" aria-label="${esc(Lt(c.name))}" role="img"></canvas><div class="readout" id="ro"></div></div>
+    <div class="ctrls">${V.ctrls()}</div>
+    ${V.presets ? `<div class="presets"><span class="note">${state.lang === 'en' ? 'Presets' : 'அமைப்புகள்'}:</span>${V.presets.map((p, i) => `<button class="btn small" data-pre="${i}" type="button">${p[0]}</button>`).join('')}</div>` : ''}
+    ${nextBtn('ask')}`;
+  const redraw = () => { $$('#panel input[type=range]').forEach(r => { const o = $('#' + r.id + 'o'); if (o) o.textContent = r.value; }); V.draw(); };
+  $$('#panel input, #panel select').forEach(el => el.addEventListener('input', redraw));
+  $$('[data-pre]').forEach(b => b.onclick = () => { const v = V.presets[+b.dataset.pre][1]; ['ma', 'mb', 'mc', 'md'].forEach((id, i) => $('#' + id).value = v[i]); redraw(); });
+  const sw = $('#sweep');
+  if (sw) sw.onclick = () => {
+    cancelAnimationFrame(sweepRAF); const t0 = performance.now(), dur = 6000;
+    const tick = now => { const k = Math.min(1, (now - t0) / dur); const el = $('#th'); if (!el) return; el.value = (k * 180).toFixed(1); redraw(); if (k < 1) sweepRAF = requestAnimationFrame(tick); };
+    sweepRAF = requestAnimationFrame(tick);
+  };
+  bindNext();
+  if (ro) ro.disconnect();
+  ro = new ResizeObserver(() => V.draw()); ro.observe($('#stage'));
+  redraw();
+}
+
+/* ---------- ASK ---------- */
+function panelAsk(c){
+  const p = prog(c.id);
+  let h = `<p class="hint">${Lh(UI.askHint)}</p><div class="qlist">`;
+  c.ask.forEach((q, qi) => {
+    const st = p.ask[qi] || {};
+    h += `<div class="card qcard"><div class="qn">Q${qi + 1}</div><div class="qt">${Lh(q.q)}</div><div class="opts">`;
+    q.opts.forEach((o, oi) => {
+      const tried = (st.tried || []).includes(oi), cls = tried ? (o.ok ? 'right' : 'wrong') : '';
+      h += `<button class="opt ${cls}" data-q="${qi}" data-o="${oi}" ${st.done ? 'disabled' : ''}><span class="k">${String.fromCharCode(65 + oi)}</span><span>${Lh(o.t)}</span></button>`;
+    });
+    h += `</div>`;
+    if (st.last != null){ const o = q.opts[st.last]; h += `<div class="fb ${o.ok ? 'good' : 'bad'}">${o.mis ? `<div class="tag">${Lb(UI.misconception)}: ${Lh(MIS[o.mis])}</div>` : ''}${Lh(o.fb)}</div>`; }
+    h += `</div>`;
+  });
+  h += `</div>${tutorBox(c)}${nextBtn('check')}`;
+  $('#panel').innerHTML = h;
+  $$('.opt').forEach(b => b.onclick = () => {
+    const qi = +b.dataset.q, oi = +b.dataset.o, q = c.ask[qi], o = q.opts[oi];
+    const st = p.ask[qi] || (p.ask[qi] = {tried:[]});
+    if (!st.tried.includes(oi)) st.tried.push(oi);
+    if (st.first == null) st.first = !!o.ok;
+    st.last = oi; if (o.ok) st.done = true; else logMis(o.mis, 'ask');
+    save(); panelAsk(c); renderRail();
+  });
+  bindTutor(c); bindNext();
+}
+function tutorBox(c){
+  const turns = state.chat[c.id] || [];
+  return `<div class="card chat"><div class="row" style="justify-content:space-between"><b>${Lb(UI.askTutor)}</b><span class="chip ai">AI</span></div>
+    <div class="msgs" id="msgs">${turns.map(t => `<div class="msg ${t.role === 'user' ? 'me' : 'ai'}">${esc(t.content)}</div>`).join('')}</div>
+    <textarea class="box" id="tq" rows="2" placeholder="${esc(Lt(UI.askPlaceholder))}"></textarea>
+    <div class="row" style="margin-top:8px"><button class="btn ai" id="tsend">${Lb(UI.send)}</button><button class="btn small" id="tstop" hidden>${Lb(UI.stop)}</button>${AI.sample ? '' : `<span class="note">${Lh(UI.aiOff)}</span>`}</div></div>`;
+}
+let tutorCtl = null;
+function bindTutor(c){
+  const send = $('#tsend'); if (!send) return;
+  send.onclick = async () => {
+    if (!AI.sample){ needAI(); return; } const q = $('#tq').value.trim(); if (!q) return;
+    const turns = state.chat[c.id] || (state.chat[c.id] = []);
+    turns.push({role:'user', content:q}); $('#tq').value = '';
+    const msgs = $('#msgs'); msgs.insertAdjacentHTML('beforeend', `<div class="msg me">${esc(q)}</div><div class="msg ai" id="live">${esc(Lt(UI.thinking))}</div>`);
+    const live = $('#live'); live.removeAttribute('id');
+    const rules = `You are GanitaDrishti, a patient mathematics tutor for first-year engineering students in Tamil Nadu, India. The topic is "${c.name.en}". The student has just used this interactive visual: ${c.see.en}\nReply in ${langName()}. Use the Socratic method: give one short, clear explanation tied to the visual, then ask one guiding question. Keep it under 120 words. Write maths in plain text (x^2, sin x, f'(x)); no LaTeX, no markdown headings.`;
+    tutorCtl = new AbortController(); send.disabled = true; $('#tstop').hidden = false; $('#tstop').onclick = () => tutorCtl.abort();
+    try {
+      const {text} = await AI.sample([{role:'user', content:rules}, ...turns.slice(-8)], {cache:false, signal:tutorCtl.signal, onText:({text}) => { live.textContent = text; }});
+      turns.push({role:'assistant', content:text});
+    } catch (e) { live.textContent = e.text || aiErr(e); turns.pop(); }
+    finally { send.disabled = false; const s = $('#tstop'); if (s) s.hidden = true; }
+  };
+}
+function aiErr(e){
+  if (e && e.code === 'not_granted' && AI.status !== 'denied'){ AI.status = 'denied'; setTimeout(() => renderAINote(), 0); }
+  const en = state.lang === 'en';
+  const m = {not_granted: en ? 'AI is not allowed for this page.' : 'இந்தப் பக்கத்திற்கு AI அனுமதிக்கப்படவில்லை.', rate_limited: en ? 'Too many requests just now. Try again in a minute.' : 'அதிகக் கோரிக்கைகள். ஒரு நிமிடம் கழித்து முயலுங்கள்.', cancelled: en ? 'Stopped.' : 'நிறுத்தப்பட்டது.', images_unavailable: en ? 'Photos cannot be sent from this view.' : 'இந்தக் காட்சியில் புகைப்படம் அனுப்ப இயலாது.', image_rejected: en ? 'That photo could not be read. Try a clearer JPEG or PNG.' : 'அந்தப் புகைப்படத்தைப் படிக்க இயலவில்லை.', invalid_json: en ? 'The AI reply was incomplete. Try again.' : 'AI பதில் முழுமையாக இல்லை. மீண்டும் முயலுங்கள்.'};
+  return m[e && e.code] || (en ? 'The AI could not answer right now. Try again.' : 'AI இப்போது பதிலளிக்க இயலவில்லை.');
+}
+
+/* ---------- CHECK ---------- */
+function panelCheck(c){
+  const cfg = c.check, draft = state.drafts[c.id];
+  const text = draft != null ? draft : cfg.example;
+  $('#panel').innerHTML = `<p class="hint">${Lh(UI.checkHint)}</p>
+  <div class="cgrid">
+    <div class="card">
+      <p class="prob">${Lh(cfg.prompt)}</p>
+      <textarea class="work" id="work" spellcheck="false" aria-label="${esc(Lt(UI.checkHint))}">${esc(text)}</textarea>
+      ${draft == null ? `<p class="note" id="exnote">${Lh(UI.example)}</p>` : ''}
+      <div id="photoRow" ${AI.images ? '' : 'hidden'} style="margin-top:10px"><label class="note" for="photo"><b>${Lb(UI.photo)}</b> · ${Lb(UI.photoNote)}</label><br><input type="file" id="photo" class="filein" accept="${esc((AI.imgTypes || []).join(',') || 'image/*')}"></div>
+      <div class="row" style="margin-top:12px"><button class="btn primary" id="doCheck">${Lb(UI.checkBtn)}</button><button class="btn ai" id="doAI">${Lb(UI.aiDiag)} <span class="chip ai">AI</span></button></div>
+      <div style="margin-top:12px"><button class="linkbtn" id="solT">${Lb(state.showSol[c.id] ? UI.hideSol : UI.showSol)}</button>${state.showSol[c.id] ? `<div class="sol">${Lpre(cfg.sol)}</div>` : ''}</div>
+    </div>
+    <div class="card" id="res" aria-live="polite"></div>
+  </div>${nextBtn('apply')}`;
+  const work = $('#work');
+  work.oninput = () => { state.drafts[c.id] = work.value; save(); const n = $('#exnote'); if (n) n.remove(); };
+  $('#doCheck').onclick = () => { const r = localCheck(cfg, work.value); r.src = 'offline'; r.lines = work.value.split('\n'); state.checkRes[c.id] = r; applyCheckResult(c, r); };
+  $('#doAI').onclick = () => aiDiagnose(c);
+  $('#solT').onclick = () => { state.showSol[c.id] = !state.showSol[c.id]; panelCheck(c); };
+  bindNext();
+  renderResult(c, state.checkRes[c.id]);
+}
+function applyCheckResult(c, r){
+  if (r.status === 'ok'){ prog(c.id).check = true; save(); renderRail(); }
+  if (r.status === 'wrong' && r.mis) logMis(r.mis, 'check');
+  renderResult(c, r);
+}
+function renderResult(c, r){
+  const box = $('#res'); if (!box) return;
+  if (!r){ box.innerHTML = `<div class="empty">${state.lang === 'en' ? 'Press “Check my working” to see which step goes wrong.' : '“என் தீர்வைச் சரிபார்” அழுத்தி எந்தப் படி தவறு எனப் பாருங்கள்.'}</div>`; return; }
+  if (r.loading){ box.innerHTML = `<div class="empty">${Lb(UI.thinking)}</div>`; return; }
+  const pill = r.status === 'ok' ? `<span class="pill ok">✓ ${Lb(UI.correct)}</span>` : r.status === 'partial' ? `<span class="pill part">${Lb(UI.partial)}</span>` : r.status === 'unread' ? `<span class="pill part">${Lb(UI.unread)}</span>` : `<span class="pill bad">✗ ${Lb(UI.notQuite)}</span>`;
+  let h = `<div class="result"><div class="row" style="justify-content:space-between">${pill}<span class="chip ${r.src === 'ai' ? 'ai' : ''}">${r.src === 'ai' ? 'AI' : (state.lang === 'en' ? 'offline checker' : 'இணையமில்லாச் சரிபார்ப்பு')}</span></div>`;
+  const lines = r.lines || [];
+  if (lines.some(l => l.trim())){
+    h += `<ol class="lines">${lines.map((l, i) => l.trim() ? `<li class="${r.line === i && r.status !== 'ok' ? 'bad' : ''}"><span class="ln">${i + 1}</span><span>${esc(l)}</span></li>` : '').join('')}</ol>`;
+  }
+  if (r.status === 'wrong' && r.line != null) h += `<div><b>${Lb(UI.firstWrong)}:</b> ${Lb(UI.line)} ${r.line + 1}</div>`;
+  if (r.status === 'unread') h += `<p>${Lh(UI.unreadNote)}</p>`;
+  if (r.status === 'partial') h += `<p>${r.note === 'classify' ? Lh({en:'The critical points are right. Now classify each one as a maximum or a minimum.', ta:'மாறுநிலைப் புள்ளிகள் சரி. இப்போது ஒவ்வொன்றையும் பெருமமா சிறுமமா என வகைப்படுத்துங்கள்.'}) : Lh({en:'Every step so far is right, but the working stops before the final answer.', ta:'இதுவரை எல்லாப் படிகளும் சரி; ஆனால் இறுதி விடைக்கு முன் நின்றுவிட்டது.'})}</p>`;
+  if (r.mis && MIS[r.mis] && r.status !== 'ok'){
+    h += `<div class="misbox"><div class="id">${Lb(UI.misconception)} · ${r.mis}</div><div>${Lh(MIS[r.mis])}</div><div style="margin-top:6px"><b>${Lb(UI.fix)}:</b> ${Lh(MIS[r.mis].fix)}</div></div>`;
+  }
+  if (r.explain) h += `<div>${Lh(r.explain)}</div>`;
+  if (r.hint) h += `<div><b>${Lb(UI.hint)}:</b> ${Lh(r.hint)}</div>`;
+  if (r.status === 'ok') h += `<p>${Lh({en:'Every step checks out. Try the Apply problems next.', ta:'எல்லாப் படிகளும் சரி. அடுத்து பயன்படுத்து கணக்குகளை முயலுங்கள்.'})}</p>`;
+  if (r.status !== 'ok') h += `<div class="row"><button class="btn small" id="toSee">${Lb(UI.seeIt)}</button></div>`;
+  h += `</div>`;
+  box.innerHTML = h;
+  const ts = $('#toSee'); if (ts) ts.onclick = () => { state.step = 'see'; renderMain(); window.scrollTo({top:0}); };
+}
+async function aiDiagnose(c){
+  if (!AI.sample) return;
+  const cfg = c.check, work = $('#work').value, file = $('#photo') && $('#photo').files[0];
+  const ids = Object.keys(MIS).filter(k => MIS[k].c === c.id || MIS[k].c === 'any');
+  const numbered = work.split('\n').map((l, i) => `${i + 1}: ${l}`).join('\n');
+  const prompt = `You are a mathematics tutor for first-year engineering students in Tamil Nadu. Diagnose a student's working.
+Problem: ${cfg.prompt.en}
+Reference solution:
+${cfg.sol.en}
+Known misconceptions (id: description):
+${ids.map(k => `- ${k}: ${MIS[k].en}`).join('\n')}
+${file ? 'The student\'s handwritten working is in the attached photo. Read it line by line, number the lines from 1, and diagnose that.' : 'Student working (numbered lines):\n' + numbered}
+Find the first line that is mathematically wrong and the misconception behind it.
+Reply with only JSON: {"correct": true|false, "first_wrong_line": number or null, "misconception_id": one of the ids above or "OTHER" or null, "explanation_en": string, "explanation_ta": string (Tamil script), "hint_en": string, "hint_ta": string, "transcription": string (the lines you read from the photo separated by \\n, or "" if there is no photo)}
+Each explanation under 60 words, specific to the student's line. The hint must not give away the full answer. Plain-text maths only.`;
+  state.checkRes[c.id] = {loading:true}; renderResult(c, state.checkRes[c.id]);
+  try {
+    const opts = {modelTier:'default'}; if (file) opts.images = [file];
+    const j = await AI.sample.json(prompt, opts);
+    const lines = file && j.transcription ? String(j.transcription).split('\n') : work.split('\n');
+    const r = {src:'ai', lines, status: j.correct ? 'ok' : 'wrong', line: (j.first_wrong_line > 0 ? j.first_wrong_line - 1 : null),
+      mis: MIS[j.misconception_id] ? j.misconception_id : null,
+      explain: j.correct ? null : {en: j.explanation_en || '', ta: j.explanation_ta || j.explanation_en || ''},
+      hint: j.correct || !j.hint_en ? null : {en: j.hint_en, ta: j.hint_ta || j.hint_en}};
+    state.checkRes[c.id] = r; applyCheckResult(c, r);
+  } catch (e) {
+    state.checkRes[c.id] = null; const box = $('#res'); if (box) box.innerHTML = `<div class="empty">${esc(aiErr(e))}</div>`;
+  }
+}
+
+/* ---------- APPLY ---------- */
+function panelApply(c){
+  const p = prog(c.id); const lvl = p.level || 1;
+  let cur = state.apply[c.id];
+  if (!cur || cur.level !== lvl) cur = state.apply[c.id] = {level:lvl, prob:GEN[c.id][lvl - 1](), done:false, res:null};
+  const pr = cur.prob;
+  $('#panel').innerHTML = `<p class="hint">${Lh(UI.applyHint)}</p>
+   <div class="card">
+     <div class="row" style="justify-content:space-between"><span><b>${Lb(UI.level)} ${lvl}</b> <span class="pips">${[1, 2, 3].map(i => `<i class="${i <= lvl ? 'on' : ''}"></i>`).join('')}</span></span><span class="note">${state.lang === 'en' ? 'Solved' : 'தீர்த்தவை'}: ${p.applyOk || 0}</span></div>
+     <p class="prob" style="margin-top:12px">${Lh(pr.q)}</p>
+     <div class="ansrow"><label for="ans" class="note">${Lb(UI.yourAnswer)}</label><input id="ans" inputmode="decimal" autocomplete="off" ${cur.done ? 'disabled' : ''}> <span class="mono muted">${esc(pr.unit || '')}</span>
+       <button class="btn primary" id="sub" ${cur.done ? 'disabled' : ''}>${Lb(UI.submit)}</button><button class="btn" id="newp">${Lb(UI.newProblem)}</button></div>
+     <div id="afb" aria-live="polite" style="margin-top:12px"></div>
+   </div>`;
+  const showFb = () => {
+    const r = cur.res; if (!r) return;
+    let h = r.ok ? `<span class="pill ok">✓ ${Lb(UI.correct)}</span>${r.up ? ` <span class="pill ok">${Lb(UI.levelUp)} → ${p.level}</span>` : ''}` : `<span class="pill bad">✗ ${Lb(UI.notQuite)}</span> <span class="note">${Lb(UI.answerWas)}: <b class="mono">${pr.ans} ${esc(pr.unit || '')}</b></span>`;
+    h += `<div class="sol"><b>${Lb(UI.workedSol)}</b>\n${Lpre(pr.sol)}</div>`;
+    if (!r.ok){
+      h += `<div class="misbox" style="margin-top:10px"><div class="id">${Lb(UI.misconception)} (${state.lang === 'en' ? 'likely' : 'சாத்தியமான'}) · ${pr.mis}</div>${Lh(MIS[pr.mis])}</div>`;
+      h += `<div class="row" style="margin-top:10px"><button class="btn ai small" id="exp">${Lb(UI.explainMistake)} <span class="chip ai">AI</span></button></div><div id="expOut" class="msg ai" style="margin-top:8px" hidden></div>`;
+    }
+    $('#afb').innerHTML = h;
+    const ex = $('#exp');
+    if (ex) ex.onclick = async () => {
+      const out = $('#expOut'); out.hidden = false; out.textContent = Lt(UI.thinking); ex.disabled = true;
+      try {
+        const prompt = `A first-year engineering student in Tamil Nadu answered this problem.\nProblem: ${pr.q.en}\nCorrect answer: ${pr.ans} ${pr.unit || ''}\nWorked solution: ${pr.sol.en}\nStudent's answer: ${r.given}\nIn ${langName()}, explain in under 90 words what the student most likely did wrong (guess the specific slip from the number they gave) and how to avoid it next time. Plain-text maths, no headings.`;
+        await AI.sample(prompt, {onText:({text}) => { out.textContent = text; }});
+      } catch (e) { out.textContent = e.text || aiErr(e); }
+      finally { ex.disabled = false; }
+    };
+  };
+  showFb();
+  $('#sub').onclick = () => {
+    const raw = $('#ans').value.trim(); if (!raw) return;
+    const g = tryParse(raw.replace(/,/g, '')); const v = g && !g.usesVar ? g(0) : NaN;
+    if (!isFinite(v)){ $('#afb').innerHTML = `<span class="note">${state.lang === 'en' ? 'Enter a number, for example 12.5' : 'ஒரு எண்ணை உள்ளிடுங்கள், எ.கா. 12.5'}</span>`; return; }
+    const tol = pr.tol != null ? Math.max(pr.tol, 0.011 * Math.abs(pr.ans)) : 1e-6 * (1 + Math.abs(pr.ans));
+    const ok = Math.abs(v - pr.ans) <= tol; let up = false;
+    if (ok){ p.applyOk = (p.applyOk || 0) + 1; p.streak = (p.streak || 0) + 1; if (p.streak >= 2 && (p.level || 1) < 3){ p.level = (p.level || 1) + 1; p.streak = 0; up = true; } }
+    else { p.streak = 0; logMis(pr.mis, 'apply'); }
+    cur.done = true; cur.res = {ok, up, given: raw}; save(); renderRail();
+    $('#sub').disabled = true; $('#ans').disabled = true; showFb();
+  };
+  $('#ans').onkeydown = e => { if (e.key === 'Enter') $('#sub').click(); };
+  $('#newp').onclick = () => {
+    const pp = prog(c.id);
+    if (cur.res && !cur.res.ok && (pp.level || 1) > 1){ pp.level -= 1; save(); }
+    state.apply[c.id] = null; panelApply(c);
+  };
+}
+
+/* ================= COLLEGE ================= */
+function saveCourse(){ store.set('courses', state.courses); store.set('ci', state.ci); state.courseDirty = true; }
+function switchCourse(i){ state.ci = i; store.set('ci', i); state.paper = null; state.prevIds = []; state.tamil = null; state.marks = {source:'sample', rows:null, name:''}; state.heatSel = null; state.courseDirty = true; }
+function genPaper(another){
+  if (another){ state.prevIds = state.paper ? state.paper.qs.map(q => q.id) : []; state.qpCfg.seed += 1; }
+  const cfg = Object.assign({}, state.qpCfg, {prev: state.prevIds});
+  state.paper = jpsoPaper(state.course, cfg); state.tamil = null; state.showTa = false; state.courseDirty = false;
+  if (state.marks.source === 'sample') state.marks.rows = null;
+  store.set('qpCfg', state.qpCfg);
+}
+function renderCollege(){
+  if (!state.paper || state.courseDirty) genPaper(false);
+  const tabs = [['qp', 'Question paper'], ['att', 'CO–PO attainment'], ['mis', 'Misconception analytics'], ['setup', 'Course setup']];
+  $('#app').innerHTML = `<div class="course"><select id="csel" class="sel coursesel" aria-label="Course">${state.courses.map((c, i) => `<option value="${i}" ${i === state.ci ? 'selected' : ''}>${esc(c.code)} · ${esc(c.name)}</option>`).join('')}<option value="new">+ Add a course from its syllabus…</option></select><span class="note">${state.lang === 'en' ? 'College dashboard' : 'கல்லூரி மேலாண்மைப் பலகை'} · ${esc(state.course.cos.length)} COs · ${esc(state.course.bank.length)} questions in bank</span></div>
+   <div class="ctabs" role="tablist">${tabs.map(([k, l]) => `<button role="tab" data-t="${k}" aria-selected="${state.ctab === k}">${l}</button>`).join('')}</div>
+   <div class="cwrap" id="cpanel"></div>`;
+  $$('.ctabs button').forEach(b => b.onclick = () => { state.ctab = b.dataset.t; store.set('ctab', state.ctab); renderCollege(); });
+  $('#csel').onchange = e => {
+    const v = e.target.value;
+    if (v === 'new'){ state.ctab = 'setup'; store.set('ctab', 'setup'); state.imp = {status:'idle'}; renderCollege(); const el = $('#imp'); if (el) el.scrollIntoView({block:'start'}); return; }
+    switchCourse(+v); renderCollege();
+  };
+  ({qp: tabQP, att: tabAtt, mis: tabMis, setup: tabSetup})[state.ctab]();
+}
+function sparkSVG(hist){
+  hist = hist.map(v => Math.log10(1 + v)); const w = 280, h = 56, mx = Math.max(...hist), mn = Math.min(...hist);
+  const X = i => 4 + i / (hist.length - 1) * (w - 8), Y = v => 6 + (mx === mn ? 0.5 : (mx - v) / (mx - mn)) * (h - 14);
+  const pts = hist.map((v, i) => `${X(i).toFixed(1)},${Y(v).toFixed(1)}`).join(' ');
+  return `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" role="img" aria-label="Best penalty per iteration"><line x1="4" x2="${w - 4}" y1="${h - 2}" y2="${h - 2}" stroke="var(--line)"/><polyline points="${pts}" fill="none" stroke="var(--accent)" stroke-width="2" vector-effect="non-scaling-stroke"/><circle cx="${X(hist.length - 1)}" cy="${Y(hist.at(-1))}" r="3.5" fill="var(--accent)"/></svg>`;
+}
+function qNo(paper){ return paperQuestions(paper); }
+function paperHTML(forDownload){
+  const P = state.paper, qs = qNo(P), ta = state.showTa && state.tamil;
+  const text = q => ta && state.tamil[q.id] ? state.tamil[q.id] : q.t;
+  let A = '', B = '';
+  qs.filter(q => q.max === 2).forEach(q => { const it = q.items[0]; A += `<tr><td class="c">${q.no.slice(1)}</td><td>${esc(text(it))}</td><td class="c">${it.co}</td><td class="c">K${it.k}</td><td class="c">2</td></tr>`; });
+  qs.filter(q => q.max !== 2).forEach(q => { const [a, b] = q.items; const row = (it, o) => it ? `<tr><td class="c">${q.no.slice(1)} (${o})</td><td>${esc(text(it))}</td><td class="c">${it.co}</td><td class="c">K${it.k}</td><td class="c">${q.max}</td></tr>` : ''; B += row(a, 'a') + `<tr class="or"><td colspan="5">OR</td></tr>` + row(b, 'b'); });
+  const nA = qs.filter(q => q.max === 2).length, nB = qs.filter(q => q.max !== 2).length, bm = P.bMarks || 16, total = 2 * nA + bm * nB;
+  const head = `<tr><th class="c">Q.No</th><th>Question</th><th class="c">CO</th><th class="c">Bloom</th><th class="c">Marks</th></tr>`;
+  const body = `<div class="hd"><span class="muted">[College name]</span><b>${esc(state.course.code)} · ${esc(state.course.name)}</b><span>End Semester Examination · Set ${state.qpCfg.seed}</span></div>
+   <div class="meta"><span>Time: 3 hours</span><span>Maximum marks: ${total}</span></div>
+   <h3>PART A (${nA} × 2 = ${2 * nA} marks) · Answer all questions</h3><div class="scroll"><table class="tbl">${head}${A}</table></div>
+   <h3>PART B (${nB} × ${bm} = ${nB * bm} marks) · Answer either (a) or (b) in each question</h3><div class="scroll"><table class="tbl">${head}${B}</table></div>
+   <p class="muted" style="font-size:12.5px;margin-top:14px">K1 Remember · K2 Understand · K3 Apply · K4 Analyse · K5 Evaluate · K6 Create</p>`;
+  if (!forDownload) return body;
+  return `<!doctype html><html><head><meta charset="utf-8"><title>${esc(state.course.code)} question paper set ${state.qpCfg.seed}</title><style>body{font-family:'Noto Sans Tamil',Arial,sans-serif;max-width:820px;margin:30px auto;padding:0 16px;color:#111}.hd{text-align:center;border-bottom:2px solid #111;padding-bottom:8px}.hd b{display:block;font-size:20px}.meta{display:flex;justify-content:space-between;margin:8px 0}h3{text-align:center;font-size:15px;margin:18px 0 8px}table{width:100%;border-collapse:collapse;font-size:14px}th,td{border:1px solid #999;padding:6px;vertical-align:top;text-align:left}td.c,th.c{text-align:center;white-space:nowrap}.or td{text-align:center;font-weight:bold;color:#555}.muted{color:#555}</style></head><body>${body}</body></html>`;
+}
+function tabQP(){
+  const P = state.paper, cfg = state.qpCfg, st = P.stats;
+  if (P.empty){ $('#cpanel').innerHTML = `<div class="card"><b>No questions in this course's bank yet</b><p class="note">Open Course setup and draft a question bank with AI, or add questions by hand. Papers are generated from the bank.</p><button class="btn primary" id="goSetup">Go to Course setup</button></div>`; $('#goSetup').onclick = () => { state.ctab = 'setup'; store.set('ctab', 'setup'); renderCollege(); }; return; }
+  const okL = st.low <= cfg.lowMax + .01, okH = st.high >= cfg.highMin - .01, okM = st.mid >= cfg.midMin - .01, okD = Math.abs(st.diffB - cfg.diffTarget) <= .25;
+  const reuse = state.prevIds.length ? P.qs.filter(q => state.prevIds.includes(q.id)).length : 0;
+  const coMarks = state.course.cos.map(c => { const a = P.slots.filter(s => s.co === c.id && s.part === 'A').length * 2; const b = P.slots.filter(s => s.co === c.id && s.opt === 'a').length * (P.bMarks || 16); return [c.id, a, b]; });
+  const covered = state.course.cos.filter(c => P.slots.some(s => s.co === c.id)).length, nCO = state.course.cos.length, bm = P.bMarks || 16;
+  const nAq = P.slots.filter(s => s.part === 'A').length, nBq = P.slots.filter(s => s.opt === 'a').length;
+  const short = nAq < 10 || nBq < 5 ? `<p class="mini bad-t" style="margin:0">The bank has too few questions for the full pattern: this paper has ${nAq} Part A and ${nBq} Part B questions. Add questions or draft more with AI in Course setup.</p>` : '';
+  $('#cpanel').innerHTML = `<div class="qpgrid">
+    <div class="card form">
+      <div><b>Paper pattern</b><div class="note">Part A 10 × 2 = 20 · Part B 5 × ${bm} = ${5 * bm} with internal choice · Total ${20 + 5 * bm}. Questions are spread evenly across the COs that have questions in the bank.</div></div>
+      ${short}
+      <div class="f"><label for="bMarks">Part B marks per question</label><select id="bMarks" class="sel"><option value="16" ${bm === 16 ? 'selected' : ''}>16 marks (total 100)</option><option value="13" ${bm === 13 ? 'selected' : ''}>13 marks (total 85)</option></select></div>
+      ${fRange('lowMax', 'Lower-order K1–K2, at most', 10, 50, 1, cfg.lowMax, '%')}
+      ${fRange('midMin', 'Apply K3, at least', 10, 60, 1, cfg.midMin, '%')}
+      ${fRange('highMin', 'Higher-order K4–K6, at least', 0, 50, 1, cfg.highMin, '%')}
+      ${fRange('diffTarget', 'Part B average difficulty (1 easy – 3 hard)', 1.5, 3, 0.1, cfg.diffTarget, '')}
+      <label class="row note" style="gap:8px"><input type="checkbox" id="avoid" ${cfg.avoid ? 'checked' : ''}> Avoid questions from the previous set</label>
+      <div class="f"><label for="seed">Set number (random seed)</label><input type="number" id="seed" value="${cfg.seed}"></div>
+      <div class="row"><button class="btn primary" id="gen">Generate paper</button><button class="btn" id="another">Another set</button></div>
+      <div><b>Constraints</b><ul class="checks" style="margin-top:6px">
+        <li><span>COs covered</span><span class="v ${covered === nCO ? 'ok-t' : 'bad-t'}">${covered === nCO ? '✓' : '✗'} ${covered}/${nCO}</span></li>
+        <li><span>K1–K2 ≤ ${cfg.lowMax}%</span><span class="v ${okL ? 'ok-t' : 'bad-t'}">${okL ? '✓' : '✗'} ${fmt(st.low, 0)}%</span></li>
+        <li><span>K3 ≥ ${cfg.midMin}%</span><span class="v ${okM ? 'ok-t' : 'bad-t'}">${okM ? '✓' : '✗'} ${fmt(st.mid, 0)}%</span></li>
+        <li><span>K4–K6 ≥ ${cfg.highMin}%</span><span class="v ${okH ? 'ok-t' : 'bad-t'}">${okH ? '✓' : '✗'} ${fmt(st.high, 0)}%</span></li>
+        <li><span>Part B difficulty ≈ ${cfg.diffTarget}</span><span class="v ${okD ? 'ok-t' : 'bad-t'}">${okD ? '✓' : '✗'} ${fmt(st.diffB, 2)}</span></li>
+        ${state.prevIds.length ? `<li><span>Repeated from previous set</span><span class="v ${reuse ? 'bad-t' : 'ok-t'}">${reuse}</span></li>` : ''}
+      </ul></div>
+      <div><b>Optimiser</b><div class="note">Jumping particle swarm: 24 particles × 70 iterations with local search. Best penalty ${fmt(P.cost, 2)} (0 means every target met). Curve: best penalty per iteration, log scale.</div>${sparkSVG(P.hist)}</div>
+    </div>
+    <div style="min-width:0">
+      <div class="row" style="margin-bottom:10px;justify-content:space-between">
+        <div class="row"><button class="btn small" id="dlPaper">Download paper (.html)</button><button class="btn small" id="dlBlue">Download blueprint (.csv)</button></div>
+        <div class="row"><button class="btn small ai" id="trTa">${state.tamil ? (state.showTa ? 'Show English' : 'Show Tamil') : 'Translate to Tamil'} <span class="chip ai">AI</span></button></div>
+      </div>
+      <div class="sheet" id="sheet">${paperHTML(false)}</div>
+      <div class="grid2">
+        <div class="card"><b>Bloom's level mix</b><div class="bars" style="margin-top:10px">
+          ${barRow('K1–K2', st.low, 100, cfg.lowMax)}${barRow('K3', st.mid, 100, cfg.midMin)}${barRow('K4–K6', st.high, 100, cfg.highMin)}</div>
+          <p class="note" style="margin:8px 0 0">Share of marks. The black tick is the target you set.</p></div>
+        <div class="card"><b>CO blueprint (marks)</b><div class="scroll" style="margin-top:8px"><table class="tbl"><tr><th>CO</th><th class="c">Part A</th><th class="c">Part B</th><th class="c">Total</th></tr>${coMarks.map(([c, a, b]) => `<tr><td>${c}</td><td class="c">${a}</td><td class="c">${b}</td><td class="c">${a + b}</td></tr>`).join('')}</table></div></div>
+      </div>
+    </div></div>`;
+  $$('#cpanel input[type=range]').forEach(r => r.oninput = () => { $('#' + r.id + 'o').textContent = r.value + (r.dataset.u || ''); });
+  const read = () => { ['lowMax', 'midMin', 'highMin', 'diffTarget'].forEach(k => cfg[k] = +$('#' + k).value); cfg.avoid = $('#avoid').checked; cfg.bMarks = +$('#bMarks').value; cfg.seed = Math.max(1, Math.round(+$('#seed').value || 1)); };
+  $('#gen').onclick = () => { read(); genPaper(false); tabQP(); toast('Paper generated: set ' + cfg.seed); };
+  $('#another').onclick = () => { read(); genPaper(true); tabQP(); toast('New set ' + cfg.seed + ' generated'); };
+  $('#dlPaper').onclick = () => offerFile(`${state.course.code}_question_paper_set${cfg.seed}.html`, paperHTML(true));
+  $('#dlBlue').onclick = () => {
+    const rows = [['Q.No', 'Option', 'Question ID', 'CO', 'Bloom', 'Difficulty', 'Marks', 'Question']];
+    qNo(P).forEach(q => q.items.forEach((it, i) => rows.push([q.no, q.items.length > 1 ? (i ? 'b' : 'a') : '', it.id, it.co, 'K' + it.k, it.d, q.max, it.t])));
+    offerFile(`${state.course.code}_blueprint_set${cfg.seed}.csv`, toCSV(rows));
+  };
+  $('#trTa').onclick = async () => {
+    if (state.tamil){ state.showTa = !state.showTa; tabQP(); return; }
+    const btn = $('#trTa'); btn.disabled = true; btn.textContent = 'Translating…';
+    try {
+      const items = P.qs.map(q => ({id:q.id, text:q.t}));
+      const res = await AI.sample.json(`Translate these engineering mathematics exam questions into formal Tamil as used in Tamil Nadu university question papers. Keep all mathematical expressions, matrices, numbers and units exactly as written. Reply with only a JSON object mapping each id to its Tamil text.\n${JSON.stringify(items)}`, {modelTier:'default'});
+      if (res && typeof res === 'object'){ state.tamil = res; state.showTa = true; }
+    } catch (e) { toast(aiErr(e)); }
+    tabQP();
+  };
+}
+function fRange(id, label, min, max, step, val, u){ return `<div class="f"><label for="${id}"><span>${label}</span><output id="${id}o">${val}${u}</output></label><input type="range" id="${id}" data-u="${u}" min="${min}" max="${max}" step="${step}" value="${val}"></div>`; }
+function barRow(label, v, max, tgt){ return `<div class="bar"><span>${label}</span><div class="track"><div class="fill" style="width:${Math.min(100, 100 * v / max)}%"></div>${tgt != null ? `<div class="tgt" style="left:${100 * tgt / max}%"></div>` : ''}</div><span class="val">${fmt(v, max <= 3 ? 2 : 0)}${max === 100 ? '%' : ''}</span></div>`; }
+function toCSV(rows){ return rows.map(r => r.map(v => { const s = String(v); return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; }).join(',')).join('\n'); }
+
+function tabAtt(){
+  if (state.paper.empty){ $('#cpanel').innerHTML = `<div class="card"><b>Generate a question paper first</b><p class="note">Attainment is computed against the questions in a paper. Add questions to this course's bank in Course setup.</p></div>`; return; }
+  const P = state.paper, cfg = state.attCfg, qs = qNo(P), qnos = qs.map(q => q.no);
+  if (!state.marks.rows){ state.marks.rows = sampleMarks(P, 60, 7); state.marks.source = 'sample'; state.marks.name = ''; }
+  const A = attainment(P, state.marks.rows, state.course, cfg);
+  const cos = state.course.cos;
+  $('#cpanel').innerHTML = `<div class="qpgrid">
+   <div class="card form">
+     <div><b>Marks data</b><div class="note">${state.marks.source === 'sample' ? `Sample section: ${A.n} simulated students for set ${state.qpCfg.seed}. Upload your own marks to replace it.` : `Uploaded: ${esc(state.marks.name)} · ${A.n} students.`}</div></div>
+     <div class="f"><label for="csv">Upload marks (.csv)</label><input type="file" id="csv" accept=".csv,text/csv" class="filein"></div>
+     <div class="row"><button class="btn small" id="tpl">Download CSV template</button>${state.marks.source !== 'sample' ? '<button class="btn small" id="useSample">Use sample data</button>' : ''}</div>
+     <div id="csvErr" class="note bad-t"></div>
+     ${fRange('threshold', 'Student attains a CO at', 40, 80, 5, cfg.threshold, '% of CO marks')}
+     ${fRange('l3', 'Level 3 when students attaining ≥', 50, 90, 5, cfg.l3, '%')}
+     ${fRange('l2', 'Level 2 when ≥', 40, 85, 5, cfg.l2, '%')}
+     ${fRange('l1', 'Level 1 when ≥', 30, 80, 5, cfg.l1, '%')}
+     ${fRange('wDirect', 'Weight of direct assessment', 50, 100, 5, cfg.wDirect, '%')}
+     <div class="f"><label>Indirect: course exit survey (0–3)</label><div class="row">${cos.map(c => `<label class="mini">${c.id} <input type="number" class="ind" data-co="${c.id}" min="0" max="3" step="0.1" value="${cfg.indirect[c.id] != null ? cfg.indirect[c.id] : 2.5}" style="width:64px"></label>`).join('')}</div></div>
+     ${fRange('target', 'Target attainment level', 1, 3, 0.1, cfg.target, '')}
+     <button class="btn small" id="dlAtt">Download attainment report (.csv)</button>
+   </div>
+   <div style="min-width:0">
+     <div class="card"><b>CO attainment</b><p class="note" style="margin:2px 0 10px">Final = ${cfg.wDirect}% direct level + ${100 - cfg.wDirect}% exit survey. Tick = target ${cfg.target}.</p>
+      <div class="scroll"><table class="tbl"><tr><th>CO</th><th>Statement</th><th class="c">Max marks</th><th class="c">Students ≥ ${cfg.threshold}%</th><th class="c">Direct level</th><th class="c">Survey</th><th style="min-width:160px">Final (0–3)</th><th class="c">Status</th></tr>
+      ${cos.map(c => { const r = A.co[c.id]; if (!r) return `<tr><td>${c.id}</td><td colspan="7" class="muted">Not assessed in this paper</td></tr>`; const met = r.final >= cfg.target; return `<tr><td><b>${c.id}</b></td><td class="mini">${esc(c.text)}</td><td class="c">${r.max}</td><td class="c">${r.pass} (${fmt(r.pct, 0)}%)</td><td class="c">${r.level}</td><td class="c">${fmt(r.indirect, 1)}</td><td><div class="bar" style="grid-template-columns:minmax(0,1fr) 40px"><div class="track"><div class="fill" style="width:${100 * r.final / 3}%;background:${met ? 'var(--accent)' : 'var(--bad)'}"></div><div class="tgt" style="left:${100 * cfg.target / 3}%"></div></div><span class="val">${fmt(r.final, 2)}</span></div></td><td class="c"><span class="status ${met ? 'met' : 'gap'}">${met ? 'Met' : 'Gap'}</span></td></tr>`; }).join('')}
+      </table></div></div>
+     <div class="card" style="margin-top:16px"><b>PO attainment</b><p class="note" style="margin:2px 0 10px">Weighted by the CO–PO mapping (1 low, 2 medium, 3 high). Edit the mapping under Course setup.</p>
+      <div class="bars">${cPOS().filter(([p]) => A.po[p] != null).map(([p, n]) => `<div class="bar" style="grid-template-columns:minmax(120px,240px) minmax(0,1fr) 46px"><span class="mini"><b>${p}</b> ${n}</span><div class="track"><div class="fill" style="width:${100 * A.po[p] / 3}%;background:${A.po[p] >= cfg.target ? 'var(--accent)' : 'var(--bad)'}"></div><div class="tgt" style="left:${100 * cfg.target / 3}%"></div></div><span class="val">${fmt(A.po[p], 2)}</span></div>`).join('')}</div>
+      <p class="note" style="margin:10px 0 0">POs with no mapped CO are left out: ${cPOS().filter(([p]) => A.po[p] == null).map(([p]) => p).join(', ') || 'none'}.</p></div>
+     ${(() => { const gaps = cos.filter(c => A.co[c.id] && A.co[c.id].final < cfg.target); return gaps.length ? `<div class="card" style="margin-top:16px"><b>Action for the course file</b><ul class="mini" style="margin:6px 0 0;padding-left:18px">${gaps.map(c => { const con = CONCEPTS.find(k => k.co === c.id); return `<li>${c.id} below target (${fmt(A.co[c.id].final, 2)}). ${con ? `Assign the “${esc(con.name.en)}” tutor module and re-test.` : 'Plan remedial classes and a re-test.'}</li>`; }).join('')}</ul></div>` : ''; })()}
+   </div></div>`;
+  $$('#cpanel input[type=range]').forEach(r => r.oninput = () => { $('#' + r.id + 'o').textContent = r.value + (r.dataset.u || ''); });
+  const recompute = () => { ['threshold', 'l3', 'l2', 'l1', 'wDirect', 'target'].forEach(k => cfg[k] = +$('#' + k).value); $$('.ind').forEach(i => { const v = Math.max(0, Math.min(3, +i.value)); cfg.indirect[i.dataset.co] = isFinite(v) ? v : 2.5; }); store.set('attCfg', cfg); tabAtt(); };
+  $$('#cpanel input[type=range], .ind').forEach(el => el.onchange = recompute);
+  $('#csv').onchange = e => {
+    const f = e.target.files[0]; if (!f) return; const rd = new FileReader();
+    rd.onload = () => { try { state.marks = {source:'csv', rows: parseMarksCSV(rd.result, qnos), name: f.name}; tabAtt(); toast('Marks loaded: ' + state.marks.rows.length + ' students'); } catch (err) { $('#csvErr').textContent = err.message; } };
+    rd.readAsText(f);
+  };
+  const us = $('#useSample'); if (us) us.onclick = () => { state.marks = {source:'sample', rows:null, name:''}; tabAtt(); };
+  $('#tpl').onclick = () => offerFile(`${state.course.code}_marks_template_set${state.qpCfg.seed}.csv`, toCSV([['RollNo', ...qnos], ['# max marks', ...qs.map(q => q.max)], ['23ME101', ...qs.map(() => '')]]).replace(/\n# max marks[^\n]*/, '') + '\n');
+  $('#dlAtt').onclick = () => {
+    const rows = [['CO', 'Statement', 'Max marks', 'Students attaining', '% attaining', 'Direct level', 'Exit survey', 'Final attainment', 'Target', 'Status']];
+    cos.forEach(c => { const r = A.co[c.id]; if (r) rows.push([c.id, c.text, r.max, r.pass, fmt(r.pct, 1), r.level, r.indirect, fmt(r.final, 2), cfg.target, r.final >= cfg.target ? 'Met' : 'Gap']); });
+    rows.push([]); rows.push(['PO', 'Name', 'Attainment']); cPOS().forEach(([p, n]) => rows.push([p, n, A.po[p] == null ? '' : fmt(A.po[p], 2)]));
+    offerFile(`${state.course.code}_CO_PO_attainment_set${state.qpCfg.seed}.csv`, toCSV(rows));
+  };
+}
+
+function tabMis(){
+  if (!state.course.sample){
+    const si = state.courses.findIndex(c => c.sample);
+    $('#cpanel').innerHTML = `<div class="card"><b>Misconception analytics come from students using the tutor</b><p class="note" style="max-width:70ch">Tutor modules in this prototype cover MA101 Engineering Mathematics I (Units I and II). Modules for ${esc(state.course.code)} · ${esc(state.course.name)} are planned after the pilot; once students use them, this tab shows the same section-wise heatmap and remedial plan.</p>${si >= 0 ? '<button class="btn" id="toSample">Show MA101 sample analytics</button>' : ''}</div>`;
+    const b = $('#toSample'); if (b) b.onclick = () => { switchCourse(si); renderCollege(); };
+    return;
+  }
+  const H = sampleHeat(); const sel = state.heatSel;
+  const max = Math.max(...SECTIONS.flatMap(s => H.ids.map(id => H.data[s][id])));
+  const counts = {}; for (const l of state.log) counts[l.id] = (counts[l.id] || 0) + 1;
+  const live = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+  const conceptOf = id => CONCEPTS.find(c => c.id === MIS[id].c);
+  $('#cpanel').innerHTML = `<div class="qpgrid rev">
+   <div style="min-width:0">
+    <div class="card"><b>Share of students showing each misconception</b><p class="note" style="margin:2px 0 10px">Sample data for four first-year sections, built from tutor attempts. Click a cell for details.</p>
+     <div class="scroll"><table class="tbl heat"><tr><th>Section</th>${H.ids.map(id => `<th class="rot c" title="${esc(MIS[id].en)}">${id.replace('M_', '').replace(/_/g, ' ')}</th>`).join('')}</tr>
+     ${SECTIONS.map(s => `<tr><td style="white-space:nowrap"><b>${s}</b><div class="mini muted">${H.n[s]} students</div></td>${H.ids.map(id => { const v = H.data[s][id]; const a = Math.round(8 + 72 * v / max); return `<td class="v" data-s="${esc(s)}" data-id="${id}" style="background:color-mix(in srgb, var(--bad) ${a}%, var(--surface));color:${a > 50 ? 'var(--surface)' : 'var(--ink)'}">${v}%</td>`; }).join('')}</tr>`).join('')}
+     </table></div><div class="legend"><span>low</span><span class="ramp"></span><span>high</span></div></div>
+    <div class="card" style="margin-top:16px"><b>Remedial plan by section</b><div class="scroll" style="margin-top:8px"><table class="tbl"><tr><th>Section</th><th>Top misconceptions</th><th>Assign tutor module</th></tr>
+     ${SECTIONS.map(s => { const top = H.ids.map(id => [id, H.data[s][id]]).sort((a, b) => b[1] - a[1]).slice(0, 2); return `<tr><td><b>${s}</b></td><td class="mini">${top.map(([id, v]) => `${esc(MIS[id].en)} <b>(${v}%)</b>`).join('<br>')}</td><td class="mini">${[...new Set(top.map(([id]) => conceptOf(id)).filter(Boolean))].map(c => `<button class="linkbtn" data-open="${c.id}">${esc(c.name.en)}</button>`).join('<br>')}</td></tr>`; }).join('')}
+     </table></div></div>
+   </div>
+   <div class="detail">
+    <div class="card">${sel ? (() => { const m = MIS[sel.id], c = conceptOf(sel.id); return `<div class="mini muted">${esc(sel.s)} · ${sel.id}</div><p style="margin:6px 0"><b>${H.data[sel.s][sel.id]}% of students</b></p><p style="margin:0 0 6px">${esc(m.en)}</p><p lang="ta" style="margin:0 0 8px">${esc(m.ta)}</p><p class="mini"><b>Fix:</b> ${esc(m.fix.en)}</p>${c ? `<button class="btn small primary" data-open="${c.id}">Open “${esc(c.name.en)}” visual</button>` : ''}`; })() : '<div class="empty">Select a cell in the heatmap.</div>'}</div>
+    <div class="card" style="margin-top:16px"><b>Live from this device</b><p class="note" style="margin:2px 0 8px">Misconceptions logged in the Student view on this browser.</p>
+     ${live.length ? `<ul class="checks">${live.map(([id, n]) => `<li><span class="mini">${esc(MIS[id].en)}</span><span class="v">×${n}</span></li>`).join('')}</ul>` : '<div class="empty mini">None yet. Work through the tutor in the Student view to see entries here.</div>'}
+    </div>
+   </div></div>`;
+  $$('.heat td.v').forEach(td => td.onclick = () => { state.heatSel = {s: td.dataset.s, id: td.dataset.id}; tabMis(); });
+  $$('[data-open]').forEach(b => b.onclick = () => { state.role = 'student'; store.set('role', 'student'); state.concept = b.dataset.open; store.set('concept', state.concept); state.step = 'see'; renderAll(); window.scrollTo({top:0}); });
+}
+
+/* ---------- syllabus import: reading PDF / Word files ---------- */
+const LIBS = {
+  pdf: ['https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js', 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js'],
+  docx: ['https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js']
+};
+const loadedLibs = {};
+function loadScript(src){
+  return loadedLibs[src] || (loadedLibs[src] = new Promise((res, rej) => {
+    const el = document.createElement('script'); el.src = src; el.onload = res;
+    el.onerror = () => { delete loadedLibs[src]; rej(new Error('The file reader could not be loaded. Check the connection and try again, or paste the text instead.')); };
+    document.head.appendChild(el);
+  }));
+}
+async function readDoc(file){
+  const name = file.name.toLowerCase();
+  if (name.endsWith('.pdf')){
+    for (const u of LIBS.pdf) await loadScript(u);   // worker first: pdf.js then runs it on the page itself
+    const lib = window.pdfjsLib; lib.GlobalWorkerOptions.workerSrc = LIBS.pdf[0];
+    const pdf = await lib.getDocument({data: new Uint8Array(await file.arrayBuffer())}).promise;
+    let out = '';
+    for (let i = 1; i <= Math.min(pdf.numPages, 40); i++){
+      const tc = await (await pdf.getPage(i)).getTextContent();
+      let line = '';
+      for (const it of tc.items){ line += it.str; if (it.hasEOL){ out += line + '\n'; line = ''; } else if (it.str && !it.str.endsWith(' ')) line += ' '; }
+      out += line + '\n';
+    }
+    return {text: out, pdf};
+  }
+  if (name.endsWith('.docx')){
+    await loadScript(LIBS.docx[0]);
+    const r = await window.mammoth.extractRawText({arrayBuffer: await file.arrayBuffer()});
+    return {text: r.value};
+  }
+  if (name.endsWith('.doc')) throw new Error('Older .doc files cannot be read here. Save the file as .docx or PDF and upload it again.');
+  return {text: await file.text()};
+}
+async function pdfImages(pdf, n){
+  const blobs = [];
+  for (let i = 1; i <= Math.min(pdf.numPages, n); i++){
+    const page = await pdf.getPage(i); const vp = page.getViewport({scale: 1.6});
+    const cv = document.createElement('canvas'); cv.width = vp.width; cv.height = vp.height;
+    await page.render({canvasContext: cv.getContext('2d'), viewport: vp}).promise;
+    blobs.push(await new Promise(r => cv.toBlob(r, 'image/jpeg', 0.85)));
+  }
+  return blobs;
+}
+async function extractWithAI(text, poText, images){
+  const prompt = `You are setting up a course in an outcome-based education (OBE) system for an Indian engineering college.
+From the documents below, extract the course details.
+${images ? 'The syllabus is in the attached page images (a scanned document).' : 'SYLLABUS:\n' + text.slice(0, 60000)}
+${poText ? '\nPROGRAMME OUTCOMES / PROGRAMME SPECIFIC OUTCOMES:\n' + poText.slice(0, 15000) : ''}
+Reply with only JSON:
+{"code": course code, "name": course title,
+ "units": [{"no": 1, "title": unit title, "topics": the unit's topics in one line}],
+ "cos": [{"id": "CO1", "text": course outcome statement, "unit": unit number it mainly covers}],
+ "pos": [{"id": "PO1", "name": short name}] including PSOs as "PSO1", "PSO2" if given,
+ "map": {"CO1": {"PO1": 3, "PO2": 2}}, "map_source": "document" or "suggested"}
+Rules: copy CO statements as written. If the documents list no COs, write one CO per unit starting with an action verb. If no POs are given, return the 12 NBA programme outcomes. If a CO–PO matrix is present, copy it (values 1–3, omit blanks) and set map_source "document"; otherwise suggest a sensible mapping and set map_source "suggested".`;
+  const opts = {modelTier: 'default'}; if (images) opts.images = images;
+  const j = await AI.sample.json(prompt, opts);
+  const units = (Array.isArray(j.units) ? j.units : []).map((u, i) => ({no: +u.no || i + 1, title: String(u.title || 'Unit ' + (i + 1)), topics: String(u.topics || '')}));
+  const cos = (Array.isArray(j.cos) ? j.cos : []).map((c, i) => ({id: /^CO\s*\d+$/i.test(String(c.id)) ? String(c.id).toUpperCase().replace(/\s/g, '') : 'CO' + (i + 1), text: String(c.text || '').trim(), unit: +c.unit || i + 1})).filter(c => c.text);
+  const pos = Array.isArray(j.pos) && j.pos.length ? j.pos.map(p => [String(p.id).toUpperCase().replace(/\s/g, ''), String(p.name || '')]) : null;
+  const map = {};
+  if (j.map && typeof j.map === 'object') for (const [co, row] of Object.entries(j.map)){ const r = {}; for (const [po, v] of Object.entries(row || {})){ const n = Math.round(+v); if (n >= 1 && n <= 3) r[String(po).toUpperCase().replace(/\s/g, '')] = n; } map[String(co).toUpperCase().replace(/\s/g, '')] = r; }
+  return {code: String(j.code || 'NEW101'), name: String(j.name || 'Imported course'), units, cos, pos, map, mapSrc: j.map_source === 'document' ? 'document' : Object.keys(map).length ? 'suggested' : 'none'};
+}
+async function runImport(){
+  const sylF = $('#sylF').files[0], poF = $('#poF').files[0], pasted = ($('#sylT') || {}).value || '';
+  if (!sylF && !pasted.trim()){ state.imp = {status:'error', msg:'Choose a syllabus file or paste the syllabus text first.'}; tabSetup(); return; }
+  const busy = msg => { state.imp = {status:'busy', msg}; const el = $('#impBody'); if (el) el.innerHTML = `<div class="empty">${esc(msg)}</div>`; };
+  try {
+    busy('Reading the documents…');
+    let text = pasted, pdf = null, poText = '';
+    if (sylF){ const r = await readDoc(sylF); text = r.text + '\n' + pasted; pdf = r.pdf || null; }
+    if (poF) poText = (await readDoc(poF)).text;
+    let images = null;
+    if (text.replace(/\s/g, '').length < 150){
+      if (pdf && AI.images){ busy('This PDF looks scanned. Preparing page images for the AI…'); images = await pdfImages(pdf, Math.min(4, AI.maxImages || 4)); }
+      else throw new Error('No text could be read from the syllabus. It may be a scanned PDF: open this page in the Claude app so the AI can read the page images, or paste the text.');
+    }
+    let preview, via;
+    if (AI.sample){
+      busy('The AI is reading the units, COs, POs and CO–PO matrix…');
+      try { preview = await extractWithAI(text, poText, images); via = 'AI'; }
+      catch (e) { if (images) throw new Error(aiErr(e)); preview = parseSyllabusText(text, poText); via = 'the offline reader (AI unavailable: ' + aiErr(e) + ')'; }
+    } else { preview = parseSyllabusText(text, poText); via = 'the offline reader'; }
+    if (!preview.cos.length) throw new Error('No course outcomes or units were found. Check that the file is the course syllabus, or paste the text.');
+    preview.via = via; state.imp = {status:'preview', preview};
+  } catch (e) { state.imp = {status:'error', msg: e.message || String(e)}; }
+  tabSetup();
+}
+async function draftBank(btn){
+  const C = state.course, msg = $('#bankMsg'), bm = state.qpCfg.bMarks || 16;
+  btn.disabled = true; let added = 0, failed = 0;
+  for (let i = 0; i < C.cos.length; i++){
+    const co = C.cos[i];
+    if (C.bank.filter(q => q.co === co.id).length >= 8) continue;
+    const unit = (C.units || []).find(u => u.no === co.unit) || (C.units || [])[i];
+    msg.textContent = `Drafting questions for ${co.id} (${i + 1} of ${C.cos.length})…`;
+    try {
+      const arr = await AI.sample.json(`You are setting questions for an Indian university end-semester examination.
+Course: ${C.code} ${C.name}
+Course outcome ${co.id}: ${co.text}
+${unit ? `Related syllabus unit: ${unit.title}. Topics: ${unit.topics}` : ''}
+Write 4 short-answer questions worth 2 marks and 4 long-answer questions worth ${bm} marks (long ones may have parts (i) and (ii)).
+Bloom's levels: short questions K1–K3; long questions K3–K5. Rate difficulty 1 (easy) to 3 (hard).
+Each question must be self-contained, unambiguous and solvable, with clean numbers. Plain text with Unicode maths symbols, no LaTeX.
+Reply with only a JSON array of 8 objects: {"t": question text, "m": 2 or ${bm}, "k": Bloom level 1–6, "d": 1–3}`, {modelTier:'default'});
+      for (const q of (Array.isArray(arr) ? arr : [])){
+        if (!q || !q.t) continue;
+        const m = +q.m === 2 ? 2 : 16, pre = (m === 2 ? 'A' : 'B') + co.id.slice(2);
+        let n = 1; while (C.bank.some(x => x.id === pre + String(n).padStart(2, '0'))) n++;
+        C.bank.push({id: pre + String(n).padStart(2, '0'), co: co.id, k: Math.min(6, Math.max(1, Math.round(+q.k) || 3)), m, d: Math.min(3, Math.max(1, Math.round(+q.d) || 2)), t: String(q.t), src: 'ai'});
+        added++;
+      }
+      saveCourse();
+    } catch (e) { failed++; if (e && (e.code === 'not_granted' || e.code === 'rate_limited')){ msg.textContent = aiErr(e); break; } }
+  }
+  toast(`${added} draft questions added${failed ? `, ${failed} CO${failed > 1 ? 's' : ''} failed` : ''}`);
+  renderCollege();
+}
+
+function impCard(){
+  const I = state.imp; let body = '';
+  const acc = '.pdf,.docx,.txt,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain';
+  if (I.status === 'busy') body = `<div class="empty">${esc(I.msg)}</div>`;
+  else if (I.status === 'preview'){
+    const P = I.preview, nPO = (P.pos || POS).length;
+    body = `<div class="grid2" style="margin-top:8px"><div class="f"><label for="pcode" class="note">Course code</label><input type="text" id="pcode" value="${esc(P.code)}"></div><div class="f"><label for="pname" class="note">Course name</label><input type="text" id="pname" value="${esc(P.name)}"></div></div>
+      <p class="note">Read with ${esc(P.via)}. ${P.units.length} units · ${P.cos.length} COs · ${nPO} POs/PSOs (${P.pos ? 'from your document' : 'NBA defaults'}) · CO–PO mapping ${P.mapSrc === 'document' ? 'copied from your document' : P.mapSrc === 'suggested' ? 'suggested by AI, please review' : 'not found; set it after creating the course'}.</p>
+      <div class="grid2" style="margin-top:4px"><div><b>Units</b><ol class="mini plist">${P.units.map(u => `<li><b>${esc(u.title)}</b><br><span class="muted">${esc(u.topics.slice(0, 160))}${u.topics.length > 160 ? '…' : ''}</span></li>`).join('') || '<li class="muted">None found</li>'}</ol></div>
+      <div><b>Course outcomes</b><ul class="mini plist">${P.cos.map(c => `<li><b>${esc(c.id)}</b> ${esc(c.text)}</li>`).join('')}</ul></div></div>
+      <div class="row" style="margin-top:10px"><button class="btn primary" id="impOk">Create course</button><button class="btn" id="impNo">Discard</button></div>`;
+  } else {
+    body = `<div class="grid2" style="margin-top:10px">
+        <div class="f"><label for="sylF" class="note"><b>Syllabus</b> · PDF, Word (.docx) or text</label><input type="file" id="sylF" class="filein" accept="${acc}"></div>
+        <div class="f"><label for="poF" class="note"><b>POs and PSOs</b> · optional; the 12 NBA POs are used if empty</label><input type="file" id="poF" class="filein" accept="${acc}"></div></div>
+      <details style="margin-top:10px"><summary class="note">Or paste the syllabus text</summary><textarea class="box" id="sylT" rows="6" placeholder="Paste the units, topics and course outcomes"></textarea></details>
+      <div class="row" style="margin-top:12px"><button class="btn primary" id="impGo">Read and set up course</button><span class="note" style="max-width:60ch">${AI.sample ? 'The AI reads units, COs, POs/PSOs and any CO–PO matrix, including scanned PDFs.' : 'Offline reader: finds units, COs, POs and a CO–PO matrix when the document lists them. In the Claude app the AI reads it more fully.'}</span></div>
+      ${I.status === 'error' ? `<p class="bad-t mini" style="margin:8px 0 0">${esc(I.msg)}</p>` : ''}`;
+  }
+  return `<div class="card" id="imp"><div class="row" style="justify-content:space-between"><b>Add a course from its syllabus</b><span class="chip ai">AI</span></div><p class="note" style="margin:2px 0 0;max-width:80ch">Upload the course syllabus and your programme's POs/PSOs. The course, its COs and the CO–PO mapping are set up for you. Then draft a question bank and generate papers in the Question paper tab.</p><div id="impBody">${body}</div></div>`;
+}
+
+function tabSetup(){
+  const C = state.course; const f = state.setupF || (state.setupF = {co:'all', part:'all'});
+  if (f.co !== 'all' && !C.cos.some(c => c.id === f.co)) f.co = 'all';
+  const bank = C.bank.filter(q => (f.co === 'all' || q.co === f.co) && (f.part === 'all' || (f.part === 'A' ? q.m === 2 : q.m !== 2)));
+  const bm = state.qpCfg.bMarks || 16, P_ = cPOS(), nAI = C.bank.filter(q => q.src === 'ai').length;
+  $('#cpanel').innerHTML = impCard() + `
+   <div class="grid2">
+    <div class="card form"><b>Course</b>
+      <div class="f"><label for="ccode">Course code</label><input type="text" id="ccode" value="${esc(C.code)}"></div>
+      <div class="f"><label for="cname">Course name</label><input type="text" id="cname" value="${esc(C.name)}"></div>
+      <b style="margin-top:6px">Course outcomes</b>
+      ${C.cos.map((c, i) => `<div class="f"><label for="co${i}">${esc(c.id)}</label><input type="text" id="co${i}" data-i="${i}" class="cotext" value="${esc(c.text)}"></div>`).join('')}
+      ${C.units && C.units.length ? `<b style="margin-top:6px">Units</b><ol class="mini plist" style="margin:0">${C.units.map(u => `<li><b>${esc(u.title)}</b> <span class="muted">${esc(u.topics.slice(0, 120))}${u.topics.length > 120 ? '…' : ''}</span></li>`).join('')}</ol>` : ''}
+    </div>
+    <div class="card" style="min-width:0"><b>CO–PO${P_.some(p => p[0].startsWith('PSO')) ? '/PSO' : ''} mapping</b><p class="note" style="margin:2px 0 8px">1 low · 2 medium · 3 high · – none${C.src === 'import' ? ' · imported values; review before use' : ''}</p>
+      <div class="scroll"><table class="tbl"><tr><th>CO</th>${P_.map(([p, n]) => `<th class="c" title="${esc(n)}">${esc(p)}</th>`).join('')}</tr>
+      ${C.cos.map(c => `<tr><td><b>${esc(c.id)}</b></td>${P_.map(([p]) => { const v = (C.map[c.id] || {})[p] || 0; return `<td class="c"><select class="mp" data-co="${esc(c.id)}" data-po="${esc(p)}" aria-label="${esc(c.id)} ${esc(p)}">${[0, 1, 2, 3].map(k => `<option value="${k}" ${k === v ? 'selected' : ''}>${k || '–'}</option>`).join('')}</select></td>`; }).join('')}</tr>`).join('')}
+      </table></div></div>
+   </div>
+   <div class="card" style="margin-top:16px">
+     <div class="row" style="justify-content:space-between"><b>Question bank · ${C.bank.length} questions${nAI ? ` · ${nAI} AI drafts` : ''}</b>
+      <div class="row"><select id="fco" class="sel"><option value="all">All COs</option>${C.cos.map(c => `<option ${f.co === c.id ? 'selected' : ''}>${esc(c.id)}</option>`).join('')}</select><select id="fpart" class="sel"><option value="all">Both parts</option><option value="A" ${f.part === 'A' ? 'selected' : ''}>Part A (2 marks)</option><option value="B" ${f.part === 'B' ? 'selected' : ''}>Part B (${bm} marks)</option></select></div></div>
+     <div class="row" style="margin-top:10px"><button class="btn ai" id="draft">Draft question bank with AI (8 per CO) <span class="chip ai">AI</span></button><span class="note" id="bankMsg">${AI.sample ? 'Drafts are tagged so faculty can review them before a paper is used.' : 'AI drafting works in the Claude app. You can add questions by hand below.'}</span></div>
+     ${C.bank.length ? `<div class="scroll" style="margin-top:10px"><table class="tbl"><tr><th>ID</th><th>Question</th><th class="c">CO</th><th class="c">Bloom</th><th class="c">Diff.</th><th class="c">Marks</th></tr>
+      ${bank.map(q => `<tr><td class="mono mini">${esc(q.id)}${q.src === 'ai' ? '<br><span class="chip ai" style="margin-top:4px">AI draft</span>' : ''}</td><td>${esc(q.t)}</td><td class="c">${esc(q.co)}</td><td class="c">K${q.k}</td><td class="c">${q.d}</td><td class="c">${q.m === 2 ? 2 : bm}</td></tr>`).join('')}
+     </table></div>` : '<div class="empty" style="margin-top:10px">No questions yet.</div>'}
+     <form id="addQ" class="row" style="margin-top:12px;align-items:flex-end">
+      <div class="f" style="flex:1 1 320px"><label for="nq" class="note">New question</label><input type="text" id="nq" required placeholder="Type the question text" style="width:100%;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:7px 9px"></div>
+      <select id="nco" class="sel" aria-label="CO">${C.cos.map(c => `<option>${esc(c.id)}</option>`).join('')}</select>
+      <select id="nk" class="sel" aria-label="Bloom level">${Object.entries(BLOOM).map(([k, n]) => `<option value="${k}" ${k === '3' ? 'selected' : ''}>${n}</option>`).join('')}</select>
+      <select id="nd" class="sel" aria-label="Difficulty"><option value="1">Easy</option><option value="2" selected>Medium</option><option value="3">Hard</option></select>
+      <select id="nm" class="sel" aria-label="Marks"><option value="2">2 marks</option><option value="16">${bm} marks</option></select>
+      <button class="btn primary" type="submit">Add to bank</button>
+     </form>
+     <div class="row" style="margin-top:14px" id="rstBox">${C.sample ? '<button class="linkbtn" id="rstCourse">Restore the sample course</button>' : state.courses.length > 1 ? '<button class="linkbtn" id="delCourse">Delete this course</button>' : ''}</div>
+   </div>`;
+  // import card
+  const go = $('#impGo'); if (go) go.onclick = runImport;
+  const ok = $('#impOk');
+  if (ok) ok.onclick = () => {
+    const P = state.imp.preview;
+    state.courses.push({code: $('#pcode').value.trim() || P.code, name: $('#pname').value.trim() || P.name, units: P.units, cos: P.cos, pos: P.pos, map: P.map || {}, bank: [], src: 'import'});
+    switchCourse(state.courses.length - 1); saveCourse(); state.imp = {status:'idle'};
+    toast('Course created. Next: draft its question bank.'); renderCollege();
+  };
+  const no = $('#impNo'); if (no) no.onclick = () => { state.imp = {status:'idle'}; tabSetup(); };
+  // course editing
+  $('#ccode').onchange = e => { C.code = e.target.value.trim() || C.code; saveCourse(); };
+  $('#cname').onchange = e => { C.name = e.target.value.trim() || C.name; saveCourse(); };
+  $$('.cotext').forEach(i => i.onchange = () => { C.cos[+i.dataset.i].text = i.value; saveCourse(); });
+  $$('.mp').forEach(s => s.onchange = () => { const m = C.map[s.dataset.co] || (C.map[s.dataset.co] = {}); const v = +s.value; if (v) m[s.dataset.po] = v; else delete m[s.dataset.po]; saveCourse(); });
+  $('#fco').onchange = e => { f.co = e.target.value; tabSetup(); };
+  $('#fpart').onchange = e => { f.part = e.target.value; tabSetup(); };
+  $('#draft').onclick = e => draftBank(e.currentTarget);
+  $('#addQ').onsubmit = e => {
+    e.preventDefault(); const t = $('#nq').value.trim(); if (!t) return;
+    const co = $('#nco').value, m = +$('#nm').value; const pre = (m === 2 ? 'A' : 'B') + co.slice(2);
+    let n = 1; while (C.bank.some(q => q.id === pre + String(n).padStart(2, '0'))) n++;
+    C.bank.push({id: pre + String(n).padStart(2, '0'), co, k: +$('#nk').value, m, d: +$('#nd').value, t});
+    saveCourse(); toast('Question added'); renderCollege();
+  };
+  const rst = $('#rstCourse');
+  if (rst) rst.onclick = () => {
+    $('#rstBox').innerHTML = `<span class="note">Replace this course, its mapping and bank with the original sample?</span> <button class="btn small" id="rY">Restore</button> <button class="btn small" id="rN">Keep mine</button>`;
+    $('#rY').onclick = () => { state.course = Object.assign(clone(DEFAULT_COURSE), {sample:true}); saveCourse(); renderCollege(); };
+    $('#rN').onclick = tabSetup;
+  };
+  const del = $('#delCourse');
+  if (del) del.onclick = () => {
+    $('#rstBox').innerHTML = `<span class="note">Delete ${esc(C.code)} and its question bank from this browser?</span> <button class="btn small" id="dY">Delete</button> <button class="btn small" id="dN">Keep</button>`;
+    $('#dY').onclick = () => { state.courses.splice(state.ci, 1); switchCourse(0); saveCourse(); renderCollege(); };
+    $('#dN').onclick = tabSetup;
+  };
+}
+
+/* ---------- file offers ---------- */
+async function offerFile(name, data){
+  if (AI.downloads){
+    try { await AI.downloads.save({filename:name, data}); return; }
+    catch (e) { if (e && e.code === 'declined') return; }
+  }
+  const m = $('#modal'); m.hidden = false;
+  m.innerHTML = `<div class="card" role="dialog" aria-label="File contents"><div class="row" style="justify-content:space-between"><b>${esc(name)}</b><button class="btn small" id="mClose">Close</button></div><p class="note" style="margin:0">Saving files is not available in this view. Copy the contents and save them as ${esc(name)}.</p><textarea class="box" id="mText" readonly>${esc(data)}</textarea><div class="row"><button class="btn primary small" id="mCopy">Copy</button></div></div>`;
+  $('#mClose').onclick = () => { m.hidden = true; m.innerHTML = ''; };
+  $('#mCopy').onclick = () => { const t = $('#mText'); navigator.clipboard.writeText(t.value).then(() => toast('Copied')).catch(() => { t.focus(); t.select(); }); };
+}
+
+/* ---------- theme changes redraw the canvas ---------- */
+const redrawSee = () => { if (state.role === 'student' && state.step === 'see' && VIS[state.concept]) VIS[state.concept].draw(); };
+try { matchMedia('(prefers-color-scheme: dark)').addEventListener('change', redrawSee); } catch (e) {}
+new MutationObserver(redrawSee).observe(document.documentElement, {attributes:true, attributeFilter:['data-theme']});
+
+/* ---------- AI buttons explain how to turn AI on when it is unavailable ---------- */
+document.addEventListener('click', e => {
+  const b = e.target.closest && e.target.closest('.btn.ai:not(#aiFix)');
+  if (b && !AI.sample){ e.preventDefault(); e.stopImmediatePropagation(); needAI(); }
+}, true);
+
+/* ---------- boot ---------- */
+renderAll();
+async function detectAI(again){
+  try {
+    if (!(window.claude && window.claude.use)){ AI.status = 'nohost'; }
+    else {
+      const [sm, d, p] = await Promise.all([window.claude.use('sample'), window.claude.use('downloads'), window.claude.use('permissions')]);
+      AI.sample = sm; AI.downloads = d || AI.downloads; AI.perms = p;
+      if (sm){
+        AI.status = 'on';
+        const lim = await sm.limits().catch(() => null);
+        AI.images = !!(lim && lim.images); AI.imgTypes = lim && lim.images ? lim.images.mediaTypes : []; AI.maxImages = lim && lim.images ? lim.images.maxCount : 0;
+        if (p){ const st = await p.state('sample').catch(() => null); if (st === 'denied') AI.status = 'denied'; }
+      } else {
+        const st = p ? await p.state('sample').catch(() => null) : null;
+        AI.status = st === 'denied' ? 'denied' : 'off';
+      }
+    }
+  } catch (e) { AI.status = AI.sample ? 'on' : 'off'; }
+  AI.ready = true; renderAll();
+  if (again && AI.status === 'on') toast('AI is on.');
+}
+detectAI();
+
+</script>
